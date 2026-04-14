@@ -10,18 +10,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Redirect root to homepage (redundant but safe)
-[[redirects]]
-  from = "/"
-  to = "/index.html"
-  status = 200
-
-# Handle all Next.js routes via plugin (catch-all)
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-
 # Security headers for all routes
 [[headers]]
   for = "/*"
