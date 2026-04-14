@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaystackPayment } from '@/lib/paystack';
-import { supabaseAdmin } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendPaymentConfirmedEmail } from '@/lib/email';
 
 // This route handles both:

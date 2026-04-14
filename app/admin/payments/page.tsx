@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { supabaseBrowser } from '@/lib/supabase';
 import { ChevronLeft, ChevronRight, CreditCard } from 'lucide-react';
-import { formatDateTime } from '@/lib/auth';
+import { formatDateTime } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
 

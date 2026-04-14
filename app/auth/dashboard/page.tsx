@@ -10,7 +10,7 @@ import {
   Package, Plus, LogOut, Copy, CheckCircle, User, Bell,
 } from 'lucide-react';
 import { cn, STATUS_LABELS, PROCUREMENT_STATUS_LABELS } from '@/lib/utils';
-import { formatDate } from '@/lib/auth';
+import { formatDate } from '@/lib/utils';
 import { getWarehouseAddress, type Origin } from '@/lib/rates';
 
 interface CustomerProfile {

@@ -5,7 +5,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, FileText } from 'lucide-react';
-import { formatDate } from '@/lib/auth';
+import { formatDate } from '@/lib/utils';
 
 export default function AdminIDReview() {
   const [customers, setCustomers] = useState<any[]>([]);

@@ -5,7 +5,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import { formatDate } from '@/lib/auth';
+import { formatDate } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
 

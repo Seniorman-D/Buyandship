@@ -1,4 +1,5 @@
-import { supabaseAdmin } from './supabase';
+// Server-side auth utilities — do not import in 'use client' components
+import { supabaseAdmin } from './supabase-admin';
 
 export async function isAdminUser(userId: string): Promise<boolean> {
   const { data, error } = await supabaseAdmin
@@ -19,22 +20,4 @@ export async function getCustomerProfile(userId: string) {
 
   if (error) return null;
   return data;
-}
-
-export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
-export function formatDateTime(dateStr: string): string {
-  const date = new Date(dateStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
