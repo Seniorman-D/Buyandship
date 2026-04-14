@@ -1,0 +1,134 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { supabaseBrowser } from '@/lib/supabase';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Package, Eye, EyeOff } from 'lucide-react';
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    const supabase = supabaseBrowser();
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Check if admin
+    const { data: adminData } = await supabase
+      .from('admins')
+      .select('id')
+      .eq('id', data.user.id)
+      .single();
+
+    if (adminData) {
+      document.cookie = 'is_admin=true; path=/; max-age=86400';
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/auth/dashboard');
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-lg">
+        <Link href="/" className="flex items-center gap-2 mb-8 justify-center">
+          <Package className="h-7 w-7 text-[#F97316]" />
+          <span className="text-[#0A2540] font-bold text-lg">
+            BuyandShip<span className="text-[#F97316]">Nigeria</span>
+          </span>
+        </Link>
+
+        <h1 className="text-2xl font-bold text-[#0A2540] mb-1">Welcome back</h1>
+        <p className="text-slate-500 text-sm mb-6">
+          New here?{' '}
+          <Link href="/auth/signup" className="text-[#F97316] font-medium hover:underline">Create an account</Link>
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label htmlFor="email">Email Address</Label>
+            <Input
+              id="email"
+              type="email"
+              required
+              placeholder="you@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <Label htmlFor="password">Password</Label>
+              <button
+                type="button"
+                className="text-xs text-[#F97316] hover:underline"
+                onClick={() => {
+                  const supabase = supabaseBrowser();
+                  if (email) {
+                    supabase.auth.resetPasswordForEmail(email, {
+                      redirectTo: `${window.location.origin}/auth/reset-password`,
+                    });
+                    setError('Password reset email sent to ' + email);
+                  }
+                }}
+              >
+                Forgot password?
+              </button>
+            </div>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPw ? 'text' : 'password'}
+                required
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPw(!showPw)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
+
+          <Button type="submit" className="w-full" size="lg" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </Button>
+        </form>
+
+        <div className="mt-6 pt-6 border-t border-slate-100 text-center">
+          <p className="text-sm text-slate-500 mb-3">Admin access?</p>
+          <Link href="/admin/login">
+            <Button variant="outline" size="sm">Admin Login</Button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

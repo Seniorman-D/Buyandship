@@ -1,0 +1,12 @@
+PLACEHOLDER: Replace this file with og-image.png (1200x630px)
+
+Suggested design for og-image.png:
+- Background: #0A2540 (navy)
+- Large text: "BuyandShip Nigeria"
+- Sub-text: "Shop Anywhere. Ship to Nigeria."
+- Include flag emojis: 🇺🇸 🇬🇧 🇨🇳 → 🇳🇬
+- Accent color: #F97316 (orange)
+- Dimensions: 1200 x 630 pixels
+
+You can create this using Canva, Figma, or any image editor.
+Name the file: og-image.png and place it in the /public/ folder.
