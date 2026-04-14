@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyNIN } from '@/lib/prembly';
-import { supabaseServer } from '@/lib/supabase-server';
+import { supabaseRoute } from '@/lib/supabase-route';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,14 +14,25 @@ export async function POST(req: NextRequest) {
     const result = await verifyNIN(nin);
 
     if (result.verified) {
-      // Update customer record if user is authenticated
-      const supabase = supabaseServer();
+      // Update / create the customer record if user is authenticated
+      const supabase = supabaseRoute();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        await supabase
+        // Upsert so we create the row if it was never saved (pre-fix registrations)
+        const meta = user.user_metadata || {};
+        await supabaseAdmin
           .from('customers')
-          .update({ nin, nin_verified: true })
-          .eq('id', user.id);
+          .upsert(
+            {
+              id: user.id,
+              full_name: (meta.full_name as string) || result.firstName || user.email || 'User',
+              email: user.email!,
+              phone: (meta.phone as string) || null,
+              nin,
+              nin_verified: true,
+            },
+            { onConflict: 'id' }
+          );
       }
     }
 

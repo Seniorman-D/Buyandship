@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseServer } from '@/lib/supabase-server';
+import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendProcurementReceivedEmail } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = supabaseServer();
+    const supabase = supabaseRoute();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -23,12 +23,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Maximum 10 product links allowed' }, { status: 400 });
     }
 
-    // Get customer
-    const { data: customer } = await supabaseAdmin
+    // Get or auto-create customer profile
+    let { data: customer } = await supabaseAdmin
       .from('customers')
       .select('id, full_name, email')
       .eq('id', user.id)
       .single();
+
+    if (!customer) {
+      const meta = user.user_metadata || {};
+      const { data: created } = await supabaseAdmin
+        .from('customers')
+        .upsert(
+          {
+            id: user.id,
+            full_name: (meta.full_name as string) || user.email || 'User',
+            email: user.email!,
+            phone: (meta.phone as string) || null,
+          },
+          { onConflict: 'id' }
+        )
+        .select('id, full_name, email')
+        .single();
+      customer = created;
+    }
 
     if (!customer) {
       return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
