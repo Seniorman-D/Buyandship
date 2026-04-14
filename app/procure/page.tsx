@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { ShieldCheck, Plus, Trash2, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Origin } from '@/lib/rates';
+import { supabaseBrowser } from '@/lib/supabase';
 
 type Step = 'verify' | 'form';
 
@@ -23,6 +24,7 @@ interface ProductLink {
 export default function ProcurePage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('verify');
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   // Verify
   const [nin, setNin] = useState('');
@@ -31,6 +33,31 @@ export default function ProcurePage() {
   const [verifiedName, setVerifiedName] = useState('');
   const [useDocFallback, setUseDocFallback] = useState(false);
   const [fullName, setFullName] = useState('');
+
+  // On mount: skip verify step if user is already NIN-verified
+  useEffect(() => {
+    async function checkVerified() {
+      const supabase = supabaseBrowser();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('customers')
+          .select('full_name, nin_verified')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile?.nin_verified) {
+          const name = profile.full_name ||
+            (session.user.user_metadata?.full_name as string) || '';
+          setVerifiedName(name);
+          setFullName(name);
+          setStep('form');
+        }
+      }
+      setCheckingAuth(false);
+    }
+    checkVerified();
+  }, []);
 
   // Form
   const [origin, setOrigin] = useState<Origin>('USA');
@@ -122,6 +149,16 @@ export default function ProcurePage() {
   }
 
   const origins: Origin[] = ['USA', 'UK', 'CHINA'];
+
+  if (checkingAuth) {
+    return (
+      <PublicLayout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="animate-spin w-8 h-8 border-4 border-[#0A2540] border-t-transparent rounded-full" />
+        </div>
+      </PublicLayout>
+    );
+  }
 
   return (
     <PublicLayout>

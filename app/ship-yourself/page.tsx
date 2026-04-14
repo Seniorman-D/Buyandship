@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
@@ -9,12 +9,14 @@ import { Label } from '@/components/ui/label';
 import { calculateShippingCost, getWarehouseAddress, isGadget, type Origin } from '@/lib/rates';
 import { ShieldCheck, Copy, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { supabaseBrowser } from '@/lib/supabase';
 
 type Step = 'verify' | 'address' | 'form';
 
 export default function ShipYourselfPage() {
   const router = useRouter();
   const [step, setStep] = useState<Step>('verify');
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   // ID Gate state
   const [nin, setNin] = useState('');
@@ -24,6 +26,31 @@ export default function ShipYourselfPage() {
   const [useDocFallback, setUseDocFallback] = useState(false);
   const [docFile, setDocFile] = useState<File | null>(null);
   const [fullName, setFullName] = useState('');
+
+  // On mount: check if user is logged in and already NIN-verified — skip verify step
+  useEffect(() => {
+    async function checkVerified() {
+      const supabase = supabaseBrowser();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('customers')
+          .select('full_name, nin_verified')
+          .eq('id', session.user.id)
+          .single();
+
+        if (profile?.nin_verified) {
+          const name = profile.full_name ||
+            (session.user.user_metadata?.full_name as string) || '';
+          setVerifiedName(name);
+          setFullName(name);
+          setStep('address');
+        }
+      }
+      setCheckingAuth(false);
+    }
+    checkVerified();
+  }, []);
 
   // Address display
   const [selectedOrigin, setSelectedOrigin] = useState<Origin>('USA');
@@ -152,6 +179,16 @@ export default function ShipYourselfPage() {
 
   const origins: Origin[] = ['USA', 'UK', 'CHINA'];
   const warehouseAddress = getWarehouseAddress(selectedOrigin, verifiedName || 'YOUR NAME');
+
+  if (checkingAuth) {
+    return (
+      <PublicLayout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="animate-spin w-8 h-8 border-4 border-[#0A2540] border-t-transparent rounded-full" />
+        </div>
+      </PublicLayout>
+    );
+  }
 
   return (
     <PublicLayout>
