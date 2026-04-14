@@ -6,7 +6,7 @@ import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Shield, Eye, EyeOff } from 'lucide-react';
+import { Shield, Eye, EyeOff, AlertTriangle } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -21,30 +21,37 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError('');
 
-    const supabase = supabaseBrowser();
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = supabaseBrowser();
 
-    if (authError) {
-      setError('Invalid credentials');
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (authError) {
+        setError('Invalid email or password.');
+        setLoading(false);
+        return;
+      }
+
+      // Check admin record
+      const { data: adminData, error: adminError } = await supabase
+        .from('admins')
+        .select('id')
+        .eq('id', data.user.id)
+        .single();
+
+      if (adminError || !adminData) {
+        await supabase.auth.signOut();
+        setError('Access denied — this account is not an admin.');
+        setLoading(false);
+        return;
+      }
+
+      router.push('/admin/dashboard');
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+      console.error('Admin login error:', err);
       setLoading(false);
-      return;
     }
-
-    const { data: adminData } = await supabase
-      .from('admins')
-      .select('id')
-      .eq('id', data.user.id)
-      .single();
-
-    if (!adminData) {
-      await supabase.auth.signOut();
-      setError('Access denied. This account does not have admin privileges.');
-      setLoading(false);
-      return;
-    }
-
-    document.cookie = 'is_admin=true; path=/; max-age=86400';
-    router.push('/admin/dashboard');
   }
 
   return (
@@ -94,7 +101,14 @@ export default function AdminLoginPage() {
               </button>
             </div>
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          {error && (
+            <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
             {loading ? 'Signing in...' : 'Admin Sign In'}
           </Button>
