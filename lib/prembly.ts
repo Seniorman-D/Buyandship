@@ -1,6 +1,3 @@
-// TODO: Swap test keys for live keys before go-live
-// Test keys are safe for development only
-
 export interface NINVerificationResult {
   verified: boolean;
   firstName?: string;
@@ -9,39 +6,57 @@ export interface NINVerificationResult {
 }
 
 export async function verifyNIN(nin: string): Promise<NINVerificationResult> {
+  const baseUrl = (process.env.PREMBLY_BASE_URL || 'https://api.prembly.com').replace(/\/$/, '');
+
+  let res: Response;
   try {
-    const res = await fetch(
-      `${process.env.PREMBLY_BASE_URL}/api/v2/biometrics/merchant/data/verification/nin`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.PREMBLY_SECRET_KEY!,
-          'app-id': process.env.PREMBLY_PUBLIC_KEY!,
-        },
-        body: JSON.stringify({ number: nin }),
-      }
-    );
+    res = await fetch(`${baseUrl}/identitypass/verification/nin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.PREMBLY_SECRET_KEY!,
+        'app-id': process.env.PREMBLY_PUBLIC_KEY!,
+      },
+      body: JSON.stringify({ number: nin }),
+    });
+  } catch (fetchErr) {
+    console.error('Prembly fetch error:', fetchErr);
+    return { verified: false, error: 'Verification service temporarily unavailable. Please try again.' };
+  }
 
-    const data = await res.json();
+  let data: Record<string, unknown>;
+  try {
+    data = await res.json();
+  } catch {
+    console.error('Prembly non-JSON response, HTTP', res.status);
+    return { verified: false, error: 'Verification service returned an unexpected response.' };
+  }
 
-    if (data.verification?.status === 'VERIFIED') {
-      return {
-        verified: true,
-        firstName: data.verification.data?.firstname,
-        lastName: data.verification.data?.lastname,
-      };
-    }
+  console.log('Prembly response:', JSON.stringify(data));
 
+  // Live API response: { status: true, detail: "...", nin_data: { firstname, lastname, ... } }
+  if (data.status === true && data.nin_data) {
+    const d = data.nin_data as Record<string, string>;
     return {
-      verified: false,
-      error: data.detail || 'Verification failed. Please check your NIN and try again.',
-    };
-  } catch (error) {
-    console.error('Prembly NIN verification error:', error);
-    return {
-      verified: false,
-      error: 'Verification service temporarily unavailable. Please try again.',
+      verified: true,
+      firstName: d.firstname || d.first_name || '',
+      lastName: d.lastname || d.last_name || d.surname || '',
     };
   }
+
+  // Sandbox/legacy response: { verification: { status: "VERIFIED", data: { firstname, lastname } } }
+  const ver = data.verification as Record<string, unknown> | undefined;
+  if (ver?.status === 'VERIFIED') {
+    const d = ver.data as Record<string, string> | undefined;
+    return {
+      verified: true,
+      firstName: d?.firstname || '',
+      lastName: d?.lastname || '',
+    };
+  }
+
+  return {
+    verified: false,
+    error: (data.detail as string) || 'Verification failed. Please check your NIN and try again.',
+  };
 }
