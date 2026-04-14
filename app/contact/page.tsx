@@ -1,13 +1,42 @@
-import type { Metadata } from 'next';
-import { PublicLayout } from '@/components/layout/PublicLayout';
-import { Phone, Mail, MessageCircle, Clock } from 'lucide-react';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Contact Us – BuyandShip Nigeria',
-  description: 'Get in touch with BuyandShip Nigeria via WhatsApp, phone, or email.',
-};
+import { useState } from 'react';
+import { PublicLayout } from '@/components/layout/PublicLayout';
+import { Phone, Mail, MessageCircle, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function ContactPage() {
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.error) {
+        setErrorMsg(data.error);
+        setStatus('error');
+      } else {
+        setStatus('success');
+        setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      }
+    } catch {
+      setErrorMsg('Could not send message. Please try WhatsApp or email directly.');
+      setStatus('error');
+    }
+  }
+
   return (
     <PublicLayout>
       <div className="bg-[#0A2540] text-white py-14 px-4">
@@ -78,104 +107,111 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Contact Form — uses Netlify Forms */}
+          {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-bold text-[#0A2540] mb-6">Send a Message</h2>
-            <form
-              name="contact"
-              method="POST"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
-              className="space-y-4"
-            >
-              <input type="hidden" name="form-name" value="contact" />
-              <p className="hidden">
-                <label>Don&apos;t fill this out if you&apos;re human: <input name="bot-field" /></label>
-              </p>
 
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
-                  placeholder="Your full name"
-                />
+            {status === 'success' ? (
+              <div className="flex items-start gap-3 p-5 bg-green-50 border border-green-200 rounded-xl">
+                <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-green-800">Message sent!</p>
+                  <p className="text-green-700 text-sm mt-1">We&apos;ll get back to you within 24 hours. For faster support, use WhatsApp.</p>
+                </div>
               </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-1">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
+                    placeholder="Your full name"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
-                  placeholder="you@email.com"
-                />
-              </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">Email Address *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
+                    placeholder="you@email.com"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
-                  placeholder="08012345678"
-                />
-              </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
+                    placeholder="08012345678"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-1">
-                  Subject *
-                </label>
-                <select
-                  id="subject"
-                  name="subject"
-                  required
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
+                  <select
+                    id="subject"
+                    name="subject"
+                    required
+                    value={form.subject}
+                    onChange={handleChange}
+                    className="w-full h-10 rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540]"
+                  >
+                    <option value="">Select a topic</option>
+                    <option value="Shipping Enquiry">Shipping Enquiry</option>
+                    <option value="Procurement Service">Procurement Service</option>
+                    <option value="Payment Issue">Payment Issue</option>
+                    <option value="Tracking Problem">Tracking Problem</option>
+                    <option value="ID Verification">ID Verification</option>
+                    <option value="General Question">General Question</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1">Message *</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    value={form.message}
+                    onChange={handleChange}
+                    className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540] resize-none"
+                    placeholder="How can we help you?"
+                  />
+                </div>
+
+                {status === 'error' && (
+                  <p className="text-red-600 text-sm flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" /> {errorMsg}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="w-full bg-[#0A2540] hover:bg-[#0A2540]/90 disabled:opacity-60 text-white py-3 px-6 rounded-md font-medium transition-colors"
                 >
-                  <option value="">Select a topic</option>
-                  <option value="Shipping Enquiry">Shipping Enquiry</option>
-                  <option value="Procurement Service">Procurement Service</option>
-                  <option value="Payment Issue">Payment Issue</option>
-                  <option value="Tracking Problem">Tracking Problem</option>
-                  <option value="ID Verification">ID Verification</option>
-                  <option value="General Question">General Question</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-1">
-                  Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0A2540] resize-none"
-                  placeholder="How can we help you?"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-[#0A2540] hover:bg-[#0A2540]/90 text-white py-3 px-6 rounded-md font-medium transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>
