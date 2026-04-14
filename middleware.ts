@@ -19,9 +19,12 @@ export async function middleware(req: NextRequest) {
       }
     }
 
-    // Protect /auth/dashboard
-    if (req.nextUrl.pathname === '/auth/dashboard' && !session) {
-      return NextResponse.redirect(new URL('/auth/login', req.url));
+    // Protect customer pages
+    const customerPages = ['/auth/dashboard', '/ship-yourself', '/procure'];
+    if (customerPages.includes(req.nextUrl.pathname) && !session) {
+      const loginUrl = new URL('/auth/login', req.url);
+      loginUrl.searchParams.set('redirect', req.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
     }
   } catch {
     // If middleware fails, allow the request through rather than blocking
@@ -37,5 +40,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/auth/dashboard'],
+  matcher: ['/admin/:path*', '/auth/dashboard', '/ship-yourself', '/procure'],
 };

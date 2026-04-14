@@ -313,6 +313,7 @@ function CustomerDashboardContent() {
                       <th className="px-4 py-3 text-left">Origin</th>
                       <th className="px-4 py-3 text-left">Status</th>
                       <th className="px-4 py-3 text-left">Total</th>
+                      <th className="px-4 py-3 text-left">Payment</th>
                       <th className="px-4 py-3 text-left">Date</th>
                     </tr>
                   </thead>
@@ -327,7 +328,33 @@ function CustomerDashboardContent() {
                           </span>
                         </td>
                         <td className="px-4 py-3 text-sm font-medium text-[#0A2540]">
-                          {r.total_estimate ? `$${r.total_estimate.toFixed(2)}` : 'TBD'}
+                          {r.total_estimate ? `$${r.total_estimate.toFixed(2)}` : 'Pending review'}
+                        </td>
+                        <td className="px-4 py-3">
+                          {r.total_estimate && r.payment_status === 'unpaid' ? (
+                            <a
+                              href={`/api/payment/initialize`}
+                              onClick={async (e) => {
+                                e.preventDefault();
+                                const res = await fetch('/api/payment/initialize', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ requestId: r.id, requestType: 'procurement' }),
+                                });
+                                const d = await res.json();
+                                if (d.authorization_url) window.location.href = d.authorization_url;
+                              }}
+                              className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-full font-semibold bg-[#F97316] text-white hover:bg-[#F97316]/90 cursor-pointer"
+                            >
+                              Pay ${r.total_estimate.toFixed(2)}
+                            </a>
+                          ) : (
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                              r.payment_status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                            }`}>
+                              {r.payment_status === 'paid' ? 'Paid' : '—'}
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-xs text-slate-400">{formatDate(r.created_at)}</td>
                       </tr>

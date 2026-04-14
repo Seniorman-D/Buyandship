@@ -42,3 +42,6 @@ next-env.d.ts
 
 # logs
 *.log
+.claude/settings.local.json
+deno.lock
+.claude/

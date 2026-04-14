@@ -5,7 +5,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ChevronLeft, ChevronRight, Edit2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit2, CheckCircle } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { PROCUREMENT_STATUS_LABELS } from '@/lib/utils';
 
@@ -45,18 +45,39 @@ export default function AdminProcurement() {
     setUpdating(true);
     const supabase = supabaseBrowser();
     const req = requests.find((r) => r.id === id);
-    const history = req?.status_history || [];
-    history.push({ status: newStatus, timestamp: new Date().toISOString() });
+    const history = [...(req?.status_history || [])];
+    if (newStatus !== req?.status) {
+      history.push({ status: newStatus, timestamp: new Date().toISOString() });
+    }
 
     const updateData: Record<string, unknown> = { status: newStatus, status_history: history };
     if (adminNotes) updateData.admin_notes = adminNotes;
-    if (estimatedCost) updateData.estimated_cost = parseFloat(estimatedCost);
-    if (procFee) updateData.procurement_fee = parseFloat(procFee);
-    if (totalEst) updateData.total_estimate = parseFloat(totalEst);
+
+    // Auto-calculate total if item cost provided but total not manually set
+    const cost = estimatedCost ? parseFloat(estimatedCost) : null;
+    const fee = procFee ? parseFloat(procFee) : cost ? cost * 0.05 : null;
+    const tot = totalEst ? parseFloat(totalEst) : (cost && fee) ? cost + fee : null;
+
+    if (cost !== null) updateData.estimated_cost = cost;
+    if (fee !== null) updateData.procurement_fee = fee;
+    if (tot !== null) updateData.total_estimate = tot;
 
     await supabase.from('procurement_requests').update(updateData).eq('id', id);
     setEditingId(null);
+    setEstimatedCost('');
+    setProcFee('');
+    setTotalEst('');
+    setAdminNotes('');
     setUpdating(false);
+    load();
+  }
+
+  async function markAsPaid(id: string) {
+    const supabase = supabaseBrowser();
+    await supabase
+      .from('procurement_requests')
+      .update({ payment_status: 'paid' })
+      .eq('id', id);
     load();
   }
 
@@ -113,16 +134,31 @@ export default function AdminProcurement() {
                         </td>
                         <td className="px-4 py-3 text-xs text-slate-400">{formatDate(r.created_at)}</td>
                         <td className="px-4 py-3">
-                          <button
-                            onClick={() => {
-                              setEditingId(r.id === editingId ? null : r.id);
-                              setNewStatus(r.status);
-                              setAdminNotes(r.admin_notes || '');
-                            }}
-                            className="p-1.5 rounded-md hover:bg-slate-100"
-                          >
-                            <Edit2 className="h-4 w-4 text-slate-500" />
-                          </button>
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => {
+                                setEditingId(r.id === editingId ? null : r.id);
+                                setNewStatus(r.status);
+                                setAdminNotes(r.admin_notes || '');
+                                setEstimatedCost('');
+                                setProcFee('');
+                                setTotalEst('');
+                              }}
+                              className="p-1.5 rounded-md hover:bg-slate-100"
+                              title="Edit"
+                            >
+                              <Edit2 className="h-4 w-4 text-slate-500" />
+                            </button>
+                            {r.payment_status !== 'paid' && r.total_estimate && (
+                              <button
+                                onClick={() => markAsPaid(r.id)}
+                                className="p-1.5 rounded-md hover:bg-green-50 text-green-600"
+                                title="Mark as paid (outside payment)"
+                              >
+                                <CheckCircle className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                       {editingId === r.id && (
