@@ -53,12 +53,18 @@ export default function SignupPage() {
     }
 
     if (data.user) {
-      // Create customer profile
-      await supabase.from('customers').insert({
-        id: data.user.id,
-        full_name: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
+      // Create customer profile via server API (uses service role to bypass RLS,
+      // since signUp with email confirmation returns no session yet so auth.uid()
+      // would be null and the direct client insert would be silently blocked)
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: data.user.id,
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+        }),
       });
 
       // Send welcome email
