@@ -53,29 +53,67 @@ function CustomerDashboardContent() {
   const [copied, setCopied] = useState<Origin | null>(null);
   const [successMsg, setSuccessMsg] = useState('');
 
+  // Success banner — reacts to URL query params independently
   useEffect(() => {
     const success = searchParams.get('success');
     if (success === 'shipping') setSuccessMsg('Shipping request submitted successfully!');
     if (success === 'procurement') setSuccessMsg('Procurement request submitted successfully!');
+  }, [searchParams]);
+
+  // Auth check + data loading — runs ONCE on mount only
+  useEffect(() => {
+    const supabase = supabaseBrowser();
+    let isMounted = true;
 
     async function load() {
-      const supabase = supabaseBrowser();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push('/auth/login'); return; }
+      // getSession() reads from cookies — no network call, never returns null mid-refresh
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/auth/login');
+        return;
+      }
 
+      const user = session.user;
       const [profileRes, shippingRes, procurementRes] = await Promise.all([
         supabase.from('customers').select('*').eq('id', user.id).single(),
         supabase.from('shipping_requests').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }),
         supabase.from('procurement_requests').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }),
       ]);
 
-      setProfile(profileRes.data);
+      if (!isMounted) return;
+
+      // Fallback to auth metadata when the customers row doesn't exist yet
+      // (e.g. users who registered before the profile-save fix)
+      const profileData: CustomerProfile = profileRes.data ?? {
+        id: user.id,
+        full_name: (user.user_metadata?.full_name as string) || user.email || 'User',
+        email: user.email || '',
+        phone: (user.user_metadata?.phone as string) || '',
+        nin_verified: false,
+      };
+
+      setProfile(profileData);
       setShippingRequests(shippingRes.data || []);
       setProcurements(procurementRes.data || []);
       setLoading(false);
     }
+
     load();
-  }, [router, searchParams]);
+
+    // Only redirect on an explicit sign-out — not on token refresh
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!isMounted) return;
+      if (event === 'SIGNED_OUT' && !session) {
+        router.push('/auth/login');
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleLogout() {
     const supabase = supabaseBrowser();
