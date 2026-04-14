@@ -17,7 +17,7 @@ export async function verifyNIN(nin: string): Promise<NINVerificationResult> {
         'x-api-key': process.env.PREMBLY_SECRET_KEY!,
         'app-id': process.env.PREMBLY_PUBLIC_KEY!,
       },
-      body: JSON.stringify({ number: nin }),
+      body: JSON.stringify({ number_nin: nin }),
     });
   } catch (fetchErr) {
     console.error('Prembly fetch error:', fetchErr);
@@ -34,13 +34,13 @@ export async function verifyNIN(nin: string): Promise<NINVerificationResult> {
 
   console.log('Prembly response:', JSON.stringify(data));
 
-  // Live API response: { status: true, detail: "...", nin_data: { firstname, lastname, ... } }
-  if (data.status === true && data.nin_data) {
-    const d = data.nin_data as Record<string, string>;
+  // Live API response: { status: true, data: { firstname, surname, ... } }
+  if (data.status === true && data.data) {
+    const d = data.data as Record<string, string>;
     return {
       verified: true,
       firstName: d.firstname || d.first_name || '',
-      lastName: d.lastname || d.last_name || d.surname || '',
+      lastName: d.surname || d.lastname || d.last_name || '',
     };
   }
 
