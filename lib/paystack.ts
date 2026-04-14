@@ -1,5 +1,5 @@
-// TODO: Ensure PAYSTACK_SECRET_KEY is regenerated and set in Netlify dashboard before launch
-// Webhook URL must be set to: https://buyandshiptonigeria.com/api/payment/verify
+// PAYSTACK_SECRET_KEY is set via Netlify environment variables — never hardcode here.
+// Webhook URL (set in Paystack dashboard): https://buyandship.netlify.app/api/payment/verify
 
 export interface PaystackInitParams {
   email: string;
