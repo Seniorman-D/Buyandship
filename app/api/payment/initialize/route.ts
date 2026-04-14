@@ -3,12 +3,21 @@ import { supabaseServer } from '@/lib/supabase-server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { initializePaystackPayment, generateReference } from '@/lib/paystack';
 
-// Exchange rates — update regularly or fetch from an FX API
-const FX_RATES_TO_NGN: Record<string, number> = {
-  USD: 1600,
-  GBP: 2050,
-  NGN: 1,
-};
+async function getFxRates(): Promise<Record<string, number>> {
+  const { data } = await supabaseAdmin
+    .from('settings')
+    .select('key, value')
+    .in('key', ['usd_to_ngn', 'gbp_to_ngn']);
+
+  const map: Record<string, string> = {};
+  (data || []).forEach((row: { key: string; value: string }) => { map[row.key] = row.value; });
+
+  return {
+    USD: parseFloat(map.usd_to_ngn || '1600'),
+    GBP: parseFloat(map.gbp_to_ngn || '2050'),
+    NGN: 1,
+  };
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,6 +44,8 @@ export async function POST(req: NextRequest) {
     if (!customer) {
       return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
     }
+
+    const FX_RATES_TO_NGN = await getFxRates();
 
     let amountNGN = 0;
     let metadata: Record<string, unknown> = {};

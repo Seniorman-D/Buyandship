@@ -114,6 +114,39 @@ export default function AdminSettings() {
             </div>
 
             <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
+              <h2 className="font-semibold text-[#0A2540]">Payment &amp; Exchange Rates</h2>
+              <p className="text-sm text-slate-500">
+                Paystack charges in Nigerian Naira (NGN). Set the exchange rates used to convert foreign currency costs before charging customers.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>USD → NGN Rate</Label>
+                  <div className="relative mt-1">
+                    <Input
+                      type="number"
+                      value={settings.usd_to_ngn || '1600'}
+                      onChange={(e) => set('usd_to_ngn', e.target.value)}
+                      placeholder="1600"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">₦ per $1</span>
+                  </div>
+                </div>
+                <div>
+                  <Label>GBP → NGN Rate</Label>
+                  <div className="relative mt-1">
+                    <Input
+                      type="number"
+                      value={settings.gbp_to_ngn || '2050'}
+                      onChange={(e) => set('gbp_to_ngn', e.target.value)}
+                      placeholder="2050"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">₦ per £1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
               <h2 className="font-semibold text-[#0A2540]">Notifications</h2>
               <div>
                 <Label>Maintenance Mode Message</Label>
