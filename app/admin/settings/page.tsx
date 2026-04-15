@@ -7,8 +7,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 
+const DEFAULTS: Record<string, string> = {
+  whatsapp: '2348029155825',
+  admin_email: 'admin@buyandshiptonigeria.com',
+  business_hours: 'Mon–Fri, 9am–5pm WAT',
+  usa_rate_per_lb: '9',
+  uk_rate_per_kg: '9',
+  china_rate_per_kg: '10',
+  usd_to_ngn: '1600',
+  gbp_to_ngn: '2050',
+  maintenance_message: '',
+};
+
 export default function AdminSettings() {
-  const [settings, setSettings] = useState<Record<string, string>>({});
+  const [settings, setSettings] = useState<Record<string, string>>(DEFAULTS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -18,7 +30,8 @@ export default function AdminSettings() {
     async function load() {
       const res = await fetch('/api/admin/settings');
       const data = await res.json();
-      if (data.settings) setSettings(data.settings);
+      // Merge DB values over defaults so all keys are always present in state
+      setSettings({ ...DEFAULTS, ...(data.settings || {}) });
       setLoading(false);
     }
     load();
@@ -47,8 +60,6 @@ export default function AdminSettings() {
     setSettings((prev) => ({ ...prev, [key]: value }));
   }
 
-  const val = (key: string, fallback: string) => settings[key] ?? fallback;
-
   return (
     <AdminLayout>
       <div className="max-w-2xl">
@@ -66,7 +77,7 @@ export default function AdminSettings() {
               <div>
                 <Label>WhatsApp Number</Label>
                 <Input
-                  value={val('whatsapp', '2348029155825')}
+                  value={settings.whatsapp}
                   onChange={(e) => set('whatsapp', e.target.value)}
                   className="mt-1"
                   placeholder="2348029155825"
@@ -75,7 +86,7 @@ export default function AdminSettings() {
               <div>
                 <Label>Admin Email</Label>
                 <Input
-                  value={val('admin_email', 'admin@buyandshiptonigeria.com')}
+                  value={settings.admin_email}
                   onChange={(e) => set('admin_email', e.target.value)}
                   className="mt-1"
                 />
@@ -83,7 +94,7 @@ export default function AdminSettings() {
               <div>
                 <Label>Business Hours</Label>
                 <Input
-                  value={val('business_hours', 'Mon–Fri, 9am–5pm WAT')}
+                  value={settings.business_hours}
                   onChange={(e) => set('business_hours', e.target.value)}
                   className="mt-1"
                 />
@@ -99,7 +110,7 @@ export default function AdminSettings() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={val('usa_rate_per_lb', '9')}
+                    value={settings.usa_rate_per_lb}
                     onChange={(e) => set('usa_rate_per_lb', e.target.value)}
                     className="mt-1"
                   />
@@ -109,7 +120,7 @@ export default function AdminSettings() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={val('uk_rate_per_kg', '9')}
+                    value={settings.uk_rate_per_kg}
                     onChange={(e) => set('uk_rate_per_kg', e.target.value)}
                     className="mt-1"
                   />
@@ -119,7 +130,7 @@ export default function AdminSettings() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={val('china_rate_per_kg', '10')}
+                    value={settings.china_rate_per_kg}
                     onChange={(e) => set('china_rate_per_kg', e.target.value)}
                     className="mt-1"
                   />
@@ -140,7 +151,7 @@ export default function AdminSettings() {
                     <Input
                       type="number"
                       step="1"
-                      value={val('usd_to_ngn', '1600')}
+                      value={settings.usd_to_ngn}
                       onChange={(e) => set('usd_to_ngn', e.target.value)}
                       placeholder="1600"
                       className="pr-16"
@@ -154,7 +165,7 @@ export default function AdminSettings() {
                     <Input
                       type="number"
                       step="1"
-                      value={val('gbp_to_ngn', '2050')}
+                      value={settings.gbp_to_ngn}
                       onChange={(e) => set('gbp_to_ngn', e.target.value)}
                       placeholder="2050"
                       className="pr-16"
@@ -172,7 +183,7 @@ export default function AdminSettings() {
                 <Label>Maintenance Mode Message</Label>
                 <textarea
                   rows={3}
-                  value={val('maintenance_message', '')}
+                  value={settings.maintenance_message}
                   onChange={(e) => set('maintenance_message', e.target.value)}
                   className="mt-1 w-full rounded-md border border-input px-3 py-2 text-sm"
                   placeholder="Leave empty to disable maintenance mode"
