@@ -201,7 +201,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
-              <Button size="xl" variant="outline" className="border-white text-white hover:bg-white/10 w-full sm:w-auto">
+              <Button size="xl" className="bg-green-500 hover:bg-green-600 text-white font-semibold w-full sm:w-auto">
                 <MessageCircle className="h-5 w-5 mr-2" /> Chat on WhatsApp
               </Button>
             </a>
