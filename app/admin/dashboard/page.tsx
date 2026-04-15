@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
-import { Package, Users, ShoppingBag, CreditCard, TrendingUp, AlertCircle } from 'lucide-react';
+import { Package, Users, ShoppingBag, AlertCircle } from 'lucide-react';
 
 interface Stats {
   totalCustomers: number;
@@ -21,29 +20,17 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function load() {
-      const supabase = supabaseBrowser();
-      const [cust, ship, proc, pendingPay] = await Promise.all([
-        supabase.from('customers').select('id', { count: 'exact' }),
-        supabase.from('shipping_requests').select('id,payment_status,estimated_cost,estimated_currency,created_at', { count: 'exact' }),
-        supabase.from('procurement_requests').select('id', { count: 'exact' }),
-        supabase.from('shipping_requests').select('id', { count: 'exact' }).eq('payment_status', 'unpaid'),
-      ]);
-
-      const recentRes = await supabase
-        .from('shipping_requests')
-        .select('id,item_name,origin,status,payment_status,created_at,customers(full_name)')
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      setRecentShipping(recentRes.data || []);
+      const res = await fetch('/api/admin/stats');
+      const data = await res.json();
       setStats({
-        totalCustomers: cust.count || 0,
-        totalShipping: ship.count || 0,
-        totalProcurement: proc.count || 0,
-        pendingPayments: pendingPay.count || 0,
+        totalCustomers: data.stats?.totalCustomers || 0,
+        totalShipping: data.stats?.totalShipping || 0,
+        totalProcurement: data.stats?.totalProcurement || 0,
+        pendingPayments: data.stats?.pendingPayments || 0,
         unverifiedIDs: 0,
         revenueThisMonth: 0,
       });
+      setRecentShipping(data.recentShipping || []);
       setLoading(false);
     }
     load();

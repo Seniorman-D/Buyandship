@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
@@ -19,20 +18,11 @@ export default function AdminCustomers() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const supabase = supabaseBrowser();
-      let query = supabase
-        .from('customers')
-        .select('*', { count: 'exact' })
-        .order('created_at', { ascending: false })
-        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-
-      if (search.trim()) {
-        query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%,phone.ilike.%${search}%`);
-      }
-
-      const { data, count } = await query;
-      setCustomers(data || []);
-      setTotal(count || 0);
+      const params = new URLSearchParams({ page: String(page), search });
+      const res = await fetch(`/api/admin/customers?${params}`);
+      const data = await res.json();
+      setCustomers(data.customers || []);
+      setTotal(data.total || 0);
       setLoading(false);
     }
     load();

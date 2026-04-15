@@ -84,12 +84,12 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main */}
       <div className="flex-1 lg:ml-60 flex flex-col">
-        <header className="bg-white border-b border-slate-200 px-4 h-14 flex items-center gap-4">
+        <header className="bg-white border-b border-slate-200 px-4 h-16 flex items-center gap-4">
           <button className="lg:hidden" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5 text-slate-600" />
           </button>
           <div className="flex items-center">
-            <Image src="/logo.png" alt="BuyandShip Nigeria" width={130} height={39} className="h-8 w-auto" />
+            <Image src="/logo.png" alt="BuyandShip Nigeria" width={180} height={54} className="h-12 w-auto" />
           </div>
         </header>
         <main className="flex-1 p-6">{children}</main>
