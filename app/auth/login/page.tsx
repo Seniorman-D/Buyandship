@@ -53,7 +53,7 @@ function LoginForm() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-lg">
         <Link href="/" className="flex items-center justify-center mb-8">
-          <Image src="/logo.png" alt="BuyandShip Nigeria" width={180} height={54} className="h-12 w-auto" />
+          <Image src="/logo.png" alt="BuyandShip Nigeria" width={240} height={72} className="h-16 w-auto" />
         </Link>
 
         <h1 className="text-2xl font-bold text-[#0A2540] mb-1">Welcome back</h1>

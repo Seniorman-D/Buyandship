@@ -202,10 +202,10 @@ function CustomerDashboardContent() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-[#0A2540] text-white px-4 py-4">
+      <header className="bg-[#0A2540] text-white px-4 py-2">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <Image src="/logo-white.png" alt="BuyandShip Nigeria" width={140} height={42} className="h-9 w-auto" />
+            <Image src="/logo-white.png" alt="BuyandShip Nigeria" width={200} height={60} className="h-14 w-auto" />
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-slate-300 text-sm hidden sm:block">{profile?.full_name}</span>
