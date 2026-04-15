@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, ChevronLeft, ChevronRight, Edit2 } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
-import { STATUS_LABELS, cn } from '@/lib/utils';
+import { formatDate, STATUS_LABELS, cn } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
 const STATUSES = ['pending', 'received_at_warehouse', 'in_transit', 'out_for_delivery', 'delivered'];
@@ -25,35 +23,28 @@ export default function AdminShipping() {
 
   async function load() {
     setLoading(true);
-    const supabase = supabaseBrowser();
-    let query = supabase
-      .from('shipping_requests')
-      .select('*,customers(full_name,email)', { count: 'exact' })
-      .order('created_at', { ascending: false })
-      .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-    if (search.trim()) {
-      query = query.or(`tracking_number.ilike.%${search}%,item_name.ilike.%${search}%`);
-    }
-    const { data, count } = await query;
-    setRequests(data || []);
-    setTotal(count || 0);
+    const params = new URLSearchParams({ page: String(page), search });
+    const res = await fetch(`/api/admin/shipping?${params}`);
+    const data = await res.json();
+    setRequests(data.requests || []);
+    setTotal(data.total || 0);
     setLoading(false);
   }
 
-  useEffect(() => { load(); }, [page, search]);
+  useEffect(() => { load(); }, [page, search]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleStatusUpdate(id: string) {
     if (!newStatus) return;
     setUpdating(true);
-    const supabase = supabaseBrowser();
     const req = requests.find((r) => r.id === id);
-    const history = req?.status_history || [];
+    const history = [...(req?.status_history || [])];
     history.push({ status: newStatus, timestamp: new Date().toISOString(), note: statusNote });
 
-    await supabase
-      .from('shipping_requests')
-      .update({ status: newStatus, status_history: history })
-      .eq('id', id);
+    await fetch('/api/admin/shipping', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, status: newStatus, status_history: history }),
+    });
 
     // Send email notification (fire and forget)
     fetch('/api/email/status-update', {
@@ -149,7 +140,7 @@ export default function AdminShipping() {
                         </td>
                       </tr>
                       {editingId === r.id && (
-                        <tr>
+                        <tr key={`edit-${r.id}`}>
                           <td colSpan={9} className="px-4 py-3 bg-blue-50">
                             <div className="flex items-center gap-3 flex-wrap">
                               <select

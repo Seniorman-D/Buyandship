@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
 import { ChevronLeft, ChevronRight, CreditCard } from 'lucide-react';
 import { formatDateTime } from '@/lib/utils';
 
@@ -17,15 +16,10 @@ export default function AdminPayments() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const supabase = supabaseBrowser();
-      const { data, count } = await supabase
-        .from('shipping_requests')
-        .select('id,item_name,estimated_cost,estimated_currency,payment_status,paystack_reference,customers(full_name,email),created_at', { count: 'exact' })
-        .eq('payment_status', 'paid')
-        .order('created_at', { ascending: false })
-        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-      setPayments(data || []);
-      setTotal(count || 0);
+      const res = await fetch(`/api/admin/payments?page=${page}`);
+      const data = await res.json();
+      setPayments(data.payments || []);
+      setTotal(data.total || 0);
       setLoading(false);
     }
     load();

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, FileText } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
@@ -14,14 +13,9 @@ export default function AdminIDReview() {
 
   async function load() {
     setLoading(true);
-    const supabase = supabaseBrowser();
-    const { data } = await supabase
-      .from('customers')
-      .select('*')
-      .eq('nin_verified', false)
-      .not('id_document_url', 'is', null)
-      .order('created_at', { ascending: false });
-    setCustomers(data || []);
+    const res = await fetch('/api/admin/id-review');
+    const data = await res.json();
+    setCustomers(data.customers || []);
     setLoading(false);
   }
 
@@ -29,8 +23,11 @@ export default function AdminIDReview() {
 
   async function handleVerify(id: string, approve: boolean) {
     setActionId(id);
-    const supabase = supabaseBrowser();
-    await supabase.from('customers').update({ nin_verified: approve }).eq('id', id);
+    await fetch('/api/admin/id-review', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, nin_verified: approve }),
+    });
 
     if (approve) {
       const customer = customers.find((c) => c.id === id);
@@ -79,33 +76,23 @@ export default function AdminIDReview() {
                       <p className="text-sm text-slate-500">{c.email}</p>
                       <p className="text-xs text-slate-400 mt-1">Submitted: {formatDate(c.created_at)}</p>
                       {c.id_document_url && (
-                        <a
-                          href={c.id_document_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-[#F97316] hover:underline mt-1 inline-block"
-                        >
+                        <a href={c.id_document_url} target="_blank" rel="noopener noreferrer"
+                          className="text-sm text-[#F97316] hover:underline mt-1 inline-block">
                           View ID Document →
                         </a>
                       )}
                     </div>
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
-                    <Button
-                      size="sm"
-                      variant="outline"
+                    <Button size="sm" variant="outline"
                       className="border-red-200 text-red-600 hover:bg-red-50"
                       onClick={() => handleVerify(c.id, false)}
-                      disabled={actionId === c.id}
-                    >
+                      disabled={actionId === c.id}>
                       <XCircle className="h-4 w-4 mr-1" /> Reject
                     </Button>
-                    <Button
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700"
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700"
                       onClick={() => handleVerify(c.id, true)}
-                      disabled={actionId === c.id}
-                    >
+                      disabled={actionId === c.id}>
                       <CheckCircle className="h-4 w-4 mr-1" /> Approve
                     </Button>
                   </div>

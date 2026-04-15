@@ -2,12 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight, Edit2, CheckCircle } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
-import { PROCUREMENT_STATUS_LABELS } from '@/lib/utils';
+import { formatDate, PROCUREMENT_STATUS_LABELS } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
 const PROC_STATUSES = ['pending', 'reviewing', 'cost_sent', 'approved', 'purchased', 'shipped', 'delivered'];
@@ -16,7 +13,6 @@ export default function AdminProcurement() {
   const [requests, setRequests] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
-  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newStatus, setNewStatus] = useState('');
@@ -28,56 +24,51 @@ export default function AdminProcurement() {
 
   async function load() {
     setLoading(true);
-    const supabase = supabaseBrowser();
-    const { data, count } = await supabase
-      .from('procurement_requests')
-      .select('*,customers(full_name,email)', { count: 'exact' })
-      .order('created_at', { ascending: false })
-      .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-    setRequests(data || []);
-    setTotal(count || 0);
+    const res = await fetch(`/api/admin/procurement?page=${page}`);
+    const data = await res.json();
+    setRequests(data.requests || []);
+    setTotal(data.total || 0);
     setLoading(false);
   }
 
-  useEffect(() => { load(); }, [page]);
+  useEffect(() => { load(); }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleUpdate(id: string) {
     setUpdating(true);
-    const supabase = supabaseBrowser();
     const req = requests.find((r) => r.id === id);
     const history = [...(req?.status_history || [])];
     if (newStatus !== req?.status) {
       history.push({ status: newStatus, timestamp: new Date().toISOString() });
     }
 
-    const updateData: Record<string, unknown> = { status: newStatus, status_history: history };
-    if (adminNotes) updateData.admin_notes = adminNotes;
-
-    // Auto-calculate total if item cost provided but total not manually set
     const cost = estimatedCost ? parseFloat(estimatedCost) : null;
     const fee = procFee ? parseFloat(procFee) : cost ? cost * 0.05 : null;
     const tot = totalEst ? parseFloat(totalEst) : (cost && fee) ? cost + fee : null;
 
+    const updateData: Record<string, unknown> = { id, status: newStatus, status_history: history };
+    if (adminNotes) updateData.admin_notes = adminNotes;
     if (cost !== null) updateData.estimated_cost = cost;
     if (fee !== null) updateData.procurement_fee = fee;
     if (tot !== null) updateData.total_estimate = tot;
 
-    await supabase.from('procurement_requests').update(updateData).eq('id', id);
+    await fetch('/api/admin/procurement', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updateData),
+    });
+
     setEditingId(null);
-    setEstimatedCost('');
-    setProcFee('');
-    setTotalEst('');
-    setAdminNotes('');
+    setEstimatedCost(''); setProcFee(''); setTotalEst(''); setAdminNotes('');
     setUpdating(false);
     load();
   }
 
   async function markAsPaid(id: string) {
-    const supabase = supabaseBrowser();
-    await supabase
-      .from('procurement_requests')
-      .update({ payment_status: 'paid' })
-      .eq('id', id);
+    await fetch('/api/admin/procurement', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, payment_status: 'paid' }),
+    });
     load();
   }
 
@@ -140,12 +131,9 @@ export default function AdminProcurement() {
                                 setEditingId(r.id === editingId ? null : r.id);
                                 setNewStatus(r.status);
                                 setAdminNotes(r.admin_notes || '');
-                                setEstimatedCost('');
-                                setProcFee('');
-                                setTotalEst('');
+                                setEstimatedCost(''); setProcFee(''); setTotalEst('');
                               }}
-                              className="p-1.5 rounded-md hover:bg-slate-100"
-                              title="Edit"
+                              className="p-1.5 rounded-md hover:bg-slate-100" title="Edit"
                             >
                               <Edit2 className="h-4 w-4 text-slate-500" />
                             </button>
@@ -162,7 +150,7 @@ export default function AdminProcurement() {
                         </td>
                       </tr>
                       {editingId === r.id && (
-                        <tr>
+                        <tr key={`edit-${r.id}`}>
                           <td colSpan={8} className="px-4 py-4 bg-purple-50">
                             <div className="space-y-3">
                               <div className="flex items-center gap-3 flex-wrap">
@@ -177,35 +165,19 @@ export default function AdminProcurement() {
                                 </select>
                               </div>
                               <div className="grid grid-cols-3 gap-3">
-                                <input
-                                  type="number"
-                                  placeholder="Item Cost ($)"
-                                  value={estimatedCost}
+                                <input type="number" placeholder="Item Cost ($)" value={estimatedCost}
                                   onChange={(e) => setEstimatedCost(e.target.value)}
-                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm"
-                                />
-                                <input
-                                  type="number"
-                                  placeholder="Proc. Fee ($)"
-                                  value={procFee}
+                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm" />
+                                <input type="number" placeholder="Proc. Fee ($)" value={procFee}
                                   onChange={(e) => setProcFee(e.target.value)}
-                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm"
-                                />
-                                <input
-                                  type="number"
-                                  placeholder="Total ($)"
-                                  value={totalEst}
+                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm" />
+                                <input type="number" placeholder="Total ($)" value={totalEst}
                                   onChange={(e) => setTotalEst(e.target.value)}
-                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm"
-                                />
+                                  className="h-9 rounded-md border border-slate-300 px-3 text-sm" />
                               </div>
-                              <input
-                                type="text"
-                                placeholder="Admin notes"
-                                value={adminNotes}
+                              <input type="text" placeholder="Admin notes" value={adminNotes}
                                 onChange={(e) => setAdminNotes(e.target.value)}
-                                className="w-full h-9 rounded-md border border-slate-300 px-3 text-sm"
-                              />
+                                className="w-full h-9 rounded-md border border-slate-300 px-3 text-sm" />
                               <div className="flex gap-2">
                                 <Button size="sm" onClick={() => handleUpdate(r.id)} disabled={updating}>
                                   {updating ? 'Saving...' : 'Save Updates'}
