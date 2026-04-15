@@ -125,7 +125,7 @@ export default function ShipYourselfPage() {
     const { origin, itemName, declaredValue, declaredCurrency } = formData;
 
     if (origin === 'UK' && isGadget(itemName)) {
-      warnings.push('❌ Gadgets/electronics cannot be shipped from the UK. Please choose USA or China.');
+      warnings.push('⚠️ Gadgets/electronics from the UK require a receipt & invoice with your account name exactly as registered. Items will be held if documents do not match.');
     }
     if (origin === 'UK' && formData.weightKg && parseFloat(formData.weightKg) < 5) {
       warnings.push('⚠️ UK minimum is 5kg – you will be charged for 5kg (£45 minimum).');

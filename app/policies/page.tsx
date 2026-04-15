@@ -96,17 +96,14 @@ Customers are responsible for any customs duties or import taxes imposed by Nige
 - Pornographic materials
 - Any items violating Nigerian customs law
 
-**UK-Specific Restrictions:**
-Gadgets and electronics CANNOT be shipped from our UK warehouse. This includes:
-- Smartphones and mobile phones
-- Laptops and computers
-- Tablets and iPads
-- Smartwatches
-- AirPods and wireless earbuds
-- Gaming consoles (PlayStation, Xbox, Nintendo)
-- Any battery-powered electronic devices
+**UK Gadgets & Electronics — Allowed with Conditions:**
+Gadgets and electronics CAN be shipped from our UK warehouse, subject to the following requirement:
 
-Electronics CAN be shipped from our USA or China warehouses.
+- Your receipt and invoice MUST display your name exactly as registered on your BuyandShip Nigeria account.
+- Items will be held and not processed if documents do not match your registered account name.
+- This applies to smartphones, laptops, tablets, iPads, AirPods, smartwatches, gaming consoles, and all battery-powered electronic devices.
+
+Electronics can also be shipped from our USA and China warehouses under the same documentation rule.
 
 **Violation**
 Shipping prohibited items will result in immediate account suspension, seizure of the shipment, and potential legal action. No refunds will be issued for prohibited items.`,

@@ -64,9 +64,9 @@ export default function RatesPage() {
                 <tr><td className="py-1.5 text-slate-500">Currency</td><td className="py-1.5 font-semibold">GBP</td></tr>
               </tbody>
             </table>
-            <div className="mt-4 p-3 bg-red-50 rounded-lg text-xs text-red-800">
+            <div className="mt-4 p-3 bg-amber-50 rounded-lg text-xs text-amber-800">
               <Info className="h-3 w-3 inline mr-1" />
-              ⚠️ No gadgets, electronics, phones, or laptops from the UK.
+              ⚠️ Gadgets &amp; electronics from UK allowed — receipt &amp; invoice must match your registered account name.
             </div>
           </div>
 

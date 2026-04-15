@@ -22,7 +22,7 @@ const faqs = [
   },
   {
     q: 'Can I ship electronics/phones/laptops from the UK?',
-    a: "No. Gadgets including phones, laptops, tablets, iPads, AirPods, smartwatches, gaming consoles, and other electronics CANNOT be shipped from our UK warehouse. You can ship electronics from the USA or China.",
+    a: "Yes, gadgets and electronics can now be shipped from our UK warehouse. However, your receipt and invoice MUST show your name exactly as it appears on your BuyandShip Nigeria account. Items will be held if documents do not match your registered name.",
   },
   {
     q: 'Why must +2348029155825 appear on my China label?',

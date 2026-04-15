@@ -585,7 +585,7 @@ function CustomerDashboardContent() {
                 )}
                 {origin === 'UK' && (
                   <p className="mt-2 text-xs text-amber-600 font-medium">
-                    ⚠️ No gadgets/electronics allowed from UK
+                    ⚠️ UK gadgets require receipt & invoice matching your account name
                   </p>
                 )}
               </div>
