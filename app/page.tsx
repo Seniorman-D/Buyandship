@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
 import {
-  Package, Plane, CheckCircle, Star, Shield, Clock, MessageCircle, ArrowRight, Globe,
+  Package, CheckCircle, Star, Shield, Clock, MessageCircle, ArrowRight, Globe,
   TrendingDown, Users,
 } from 'lucide-react';
 
@@ -90,7 +90,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <Link href="/rates">
-              <Button size="xl" variant="outline" className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10">
+              <Button size="xl" variant="ghost" className="w-full sm:w-auto bg-white/10 border-2 border-white/40 text-white hover:bg-white hover:text-[#0A2540] transition-colors">
                 View Rates
               </Button>
             </Link>
