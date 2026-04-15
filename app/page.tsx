@@ -46,7 +46,7 @@ const rates = [
     color: 'border-red-500', badge: 'No Gadgets',
   },
   {
-    flag: '🇨🇳', origin: 'China', rate: '$10/kg', min: '10kg minimum ($100)',
+    flag: '🇨🇳', origin: 'China', rate: '$10/kg', min: '3kg minimum ($30)',
     color: 'border-yellow-500', badge: 'Bulk Savings',
   },
 ];

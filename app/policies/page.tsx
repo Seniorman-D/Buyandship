@@ -69,7 +69,7 @@ We charge based on actual weight or dimensional weight, whichever is greater. Di
 **Minimums**
 - USA: Minimum charge $35 (covers 0–4 lbs)
 - UK: Minimum 5kg applies (minimum £45)
-- China: Minimum 10kg applies (minimum $100)
+- China: Minimum 3kg applies (minimum $30)
 
 **Consolidation**
 Multiple packages shipped to the same warehouse can be consolidated into one shipment. Please note this in your shipping request.

@@ -77,7 +77,7 @@ export default function RatesPage() {
             <table className="w-full text-sm">
               <tbody>
                 <tr className="border-b"><td className="py-1.5 text-slate-500">Rate</td><td className="py-1.5 font-semibold text-[#F97316]">$10/kg</td></tr>
-                <tr className="border-b"><td className="py-1.5 text-slate-500">Minimum</td><td className="py-1.5 font-semibold">$100 (10kg min)</td></tr>
+                <tr className="border-b"><td className="py-1.5 text-slate-500">Minimum</td><td className="py-1.5 font-semibold">$30 (3kg min)</td></tr>
                 <tr><td className="py-1.5 text-slate-500">Currency</td><td className="py-1.5 font-semibold">USD</td></tr>
               </tbody>
             </table>
@@ -160,7 +160,7 @@ export default function RatesPage() {
             <ul className="text-sm text-amber-800 space-y-2">
               <li>• Weight is charged at actual or dimensional weight, whichever is greater</li>
               <li>• UK minimum charge is 5kg (£45) even for lighter packages</li>
-              <li>• China minimum charge is 10kg ($100) even for lighter packages</li>
+              <li>• China minimum charge is 3kg ($30) even for lighter packages</li>
               <li>• Declare accurate item values to avoid customs delays</li>
               <li>• Items over £200 (UK) or $300 (USA/China) require a declaration</li>
             </ul>

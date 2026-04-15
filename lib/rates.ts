@@ -30,11 +30,11 @@ export function calculateShippingCost(origin: Origin, weightKg: number): RateRes
   }
 
   if (origin === 'CHINA') {
-    const kg = Math.max(weightKg, 10);
+    const kg = Math.max(weightKg, 3);
     return {
       currency: 'USD',
       amount: parseFloat((kg * 10).toFixed(2)),
-      note: weightKg < 10 ? 'Minimum 10kg applied' : `${weightKg}kg × $10/kg`,
+      note: weightKg < 3 ? 'Minimum 3kg applied' : `${weightKg}kg × $10/kg`,
     };
   }
 
@@ -75,8 +75,8 @@ export const RATE_TABLE = {
     currency: 'USD',
     ratePerUnit: 10,
     unit: 'kg',
-    minimum: { kg: 10, cost: 100 },
-    description: '$10/kg (minimum 10kg = $100)',
+    minimum: { kg: 3, cost: 30 },
+    description: '$10/kg (minimum 3kg = $30)',
   },
 };
 

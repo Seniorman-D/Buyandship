@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: 'What are your shipping rates?',
-    a: "USA: $9/lb (minimum $35 for up to 4 lbs). UK: £9/kg (minimum 5kg = £45). China: $10/kg (minimum 10kg = $100). See our Rates page for an interactive calculator.",
+    a: "USA: $9/lb (minimum $35 for up to 4 lbs). UK: £9/kg (minimum 5kg = £45). China: $10/kg (minimum 3kg = $30). See our Rates page for an interactive calculator.",
   },
   {
     q: 'Can I ship electronics/phones/laptops from the UK?',
