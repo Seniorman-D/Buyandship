@@ -90,7 +90,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <Link href="/rates">
-              <Button size="xl" variant="ghost" className="w-full sm:w-auto bg-white/10 border-2 border-white/40 text-white hover:bg-white hover:text-[#0A2540] transition-colors">
+              <Button size="xl" variant="ghost" className="w-full sm:w-auto bg-white text-[#0A2540] font-semibold hover:bg-white/90 transition-colors">
                 View Rates
               </Button>
             </Link>
