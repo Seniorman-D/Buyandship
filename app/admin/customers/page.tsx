@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
@@ -14,28 +15,46 @@ export default function AdminCustomers() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState('');
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const params = new URLSearchParams({ page: String(page), search });
-      const res = await fetch(`/api/admin/customers?${params}`);
-      const data = await res.json();
-      setCustomers(data.customers || []);
-      setTotal(data.total || 0);
-      setLoading(false);
-    }
-    load();
-  }, [page, search]);
+  async function load() {
+    setLoading(true);
+    const params = new URLSearchParams({ page: String(page), search });
+    const res = await fetch(`/api/admin/customers?${params}`);
+    const data = await res.json();
+    setCustomers(data.customers || []);
+    setTotal(data.total || 0);
+    setLoading(false);
+  }
+
+  useEffect(() => { load(); }, [page, search]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function handleSync() {
+    setSyncing(true);
+    setSyncMsg('');
+    const res = await fetch('/api/admin/sync-customers', { method: 'POST' });
+    const data = await res.json();
+    setSyncMsg(data.message || 'Sync complete.');
+    await load();
+    setSyncing(false);
+  }
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
     <AdminLayout>
       <div className="max-w-6xl">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-[#0A2540]">Customers ({total})</h1>
+          <Button onClick={handleSync} disabled={syncing} size="sm" variant="outline" className="flex items-center gap-2">
+            <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+            {syncing ? 'Syncing...' : 'Sync All Customers'}
+          </Button>
         </div>
+        {syncMsg && (
+          <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 mb-4">{syncMsg}</p>
+        )}
 
         {/* Search */}
         <div className="relative mb-4">
