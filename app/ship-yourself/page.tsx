@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { calculateShippingCost, getWarehouseAddress, isGadget, type Origin } fro
 import { ShieldCheck, Copy, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabaseBrowser } from '@/lib/supabase';
+import { ArrowLeft } from 'lucide-react';
 
 type Step = 'verify' | 'address' | 'form';
 
@@ -192,6 +194,14 @@ export default function ShipYourselfPage() {
 
   return (
     <PublicLayout>
+      <div className="bg-[#0A2540]/80 border-b border-white/10 px-4 py-2">
+        <div className="container mx-auto max-w-3xl">
+          <Link href="/auth/dashboard" className="inline-flex items-center gap-1.5 text-sm text-slate-300 hover:text-white transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </div>
+      </div>
       <div className="bg-[#0A2540] text-white py-14 px-4">
         <div className="container mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-bold mb-3">Ship Yourself</h1>

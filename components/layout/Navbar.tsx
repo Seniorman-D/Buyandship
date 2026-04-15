@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Package } from 'lucide-react';
+import { Menu, X, Package, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { supabaseBrowser } from '@/lib/supabase';
 
 const navLinks = [
   { href: '/rates', label: 'Rates' },
@@ -18,7 +19,19 @@ const navLinks = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const supabase = supabaseBrowser();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setLoggedIn(!!session);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setLoggedIn(!!session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-[#0A2540] shadow-md">
@@ -51,16 +64,27 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/auth/login">
-            <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10" size="sm">
-              Login
-            </Button>
-          </Link>
-          <Link href="/auth/signup">
-            <Button variant="accent" size="sm">
-              Get Started
-            </Button>
-          </Link>
+          {loggedIn ? (
+            <Link href="/auth/dashboard">
+              <Button variant="accent" size="sm" className="flex items-center gap-1.5">
+                <LayoutDashboard className="h-4 w-4" />
+                My Dashboard
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/auth/login">
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10" size="sm">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/auth/signup">
+                <Button variant="accent" size="sm">
+                  Get Started
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -93,16 +117,27 @@ export function Navbar() {
               </Link>
             ))}
             <div className="flex gap-3 mt-2 pt-3 border-t border-white/10">
-              <Link href="/auth/login" className="flex-1" onClick={() => setOpen(false)}>
-                <Button variant="outline" size="sm" className="w-full border-white/20 text-white hover:bg-white/10">
-                  Login
-                </Button>
-              </Link>
-              <Link href="/auth/signup" className="flex-1" onClick={() => setOpen(false)}>
-                <Button variant="accent" size="sm" className="w-full">
-                  Get Started
-                </Button>
-              </Link>
+              {loggedIn ? (
+                <Link href="/auth/dashboard" className="flex-1" onClick={() => setOpen(false)}>
+                  <Button variant="accent" size="sm" className="w-full flex items-center gap-1.5">
+                    <LayoutDashboard className="h-4 w-4" />
+                    My Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/auth/login" className="flex-1" onClick={() => setOpen(false)}>
+                    <Button variant="outline" size="sm" className="w-full border-white/20 text-white hover:bg-white/10">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/auth/signup" className="flex-1" onClick={() => setOpen(false)}>
+                    <Button variant="accent" size="sm" className="w-full">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
         </div>

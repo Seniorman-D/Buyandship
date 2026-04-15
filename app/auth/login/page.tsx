@@ -124,12 +124,6 @@ function LoginForm() {
           </Button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-slate-100 text-center">
-          <p className="text-sm text-slate-500 mb-3">Admin access?</p>
-          <Link href="/admin/login">
-            <Button variant="outline" size="sm">Admin Login</Button>
-          </Link>
-        </div>
       </div>
     </div>
   );
