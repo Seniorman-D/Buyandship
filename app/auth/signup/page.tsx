@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { Package, Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 export default function SignupPage() {
-  const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -23,8 +21,18 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  function validatePhone(phone: string) {
+    // Nigerian: 11 digits starting with 0 (070x, 080x, 081x, 090x, 091x)
+    // or international +234 format
+    return /^(0[7-9][01]\d{8}|\+234[7-9][01]\d{8})$/.test(phone.replace(/\s/g, ''));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!formData.phone || !validatePhone(formData.phone)) {
+      setError('Enter a valid Nigerian phone number (e.g. 08012345678).');
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -145,15 +153,17 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <Label htmlFor="phone">Phone Number</Label>
+            <Label htmlFor="phone">Phone Number *</Label>
             <Input
               id="phone"
               type="tel"
+              required
               placeholder="08012345678"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="mt-1"
             />
+            <p className="text-xs text-slate-400 mt-1">Nigerian number — e.g. 08012345678 or +2348012345678</p>
           </div>
 
           <div>
