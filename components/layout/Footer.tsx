@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Package, Phone, Mail, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
+import { Phone, Mail, MessageCircle } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -8,11 +9,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-1">
-            <div className="flex items-center gap-2 mb-3">
-              <Package className="h-6 w-6 text-[#F97316]" />
-              <span className="text-white font-bold text-lg">
-                BuyandShip<span className="text-[#F97316]">Nigeria</span>
-              </span>
+            <div className="mb-3">
+              <Image src="/logo-white.png" alt="BuyandShip Nigeria" width={150} height={45} className="h-10 w-auto" />
             </div>
             <p className="text-sm leading-relaxed text-slate-400">
               Shop Anywhere. Ship to Nigeria. Your trusted shipping partner for USA, UK &amp; China goods.

@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Package, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { supabaseBrowser } from '@/lib/supabase';
@@ -37,11 +38,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 bg-[#0A2540] shadow-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <Package className="h-7 w-7 text-[#F97316]" />
-          <span className="text-white font-bold text-lg leading-tight">
-            BuyandShip<span className="text-[#F97316]">Nigeria</span>
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image src="/logo-white.png" alt="BuyandShip Nigeria" width={160} height={48} className="h-10 w-auto" priority />
         </Link>
 
         {/* Desktop Nav */}

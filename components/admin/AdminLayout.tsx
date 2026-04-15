@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import {
-  Package, Users, ShoppingBag, CreditCard, Settings, LayoutDashboard,
+  Users, ShoppingBag, CreditCard, Settings, LayoutDashboard, Package,
   LogOut, Menu, X, Shield, FileCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -87,9 +88,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <button className="lg:hidden" onClick={() => setSidebarOpen(true)}>
             <Menu className="h-5 w-5 text-slate-600" />
           </button>
-          <div className="flex items-center gap-2">
-            <Package className="h-5 w-5 text-[#F97316]" />
-            <span className="font-semibold text-[#0A2540] text-sm">BuyandShip Nigeria</span>
+          <div className="flex items-center">
+            <Image src="/logo.png" alt="BuyandShip Nigeria" width={130} height={39} className="h-8 w-auto" />
           </div>
         </header>
         <main className="flex-1 p-6">{children}</main>

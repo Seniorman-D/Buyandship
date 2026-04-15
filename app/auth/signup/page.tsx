@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Package, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle } from 'lucide-react';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -112,11 +113,8 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-lg">
-        <Link href="/" className="flex items-center gap-2 mb-8 justify-center">
-          <Package className="h-7 w-7 text-[#F97316]" />
-          <span className="text-[#0A2540] font-bold text-lg">
-            BuyandShip<span className="text-[#F97316]">Nigeria</span>
-          </span>
+        <Link href="/" className="flex items-center justify-center mb-8">
+          <Image src="/logo.png" alt="BuyandShip Nigeria" width={180} height={54} className="h-12 w-auto" />
         </Link>
 
         <h1 className="text-2xl font-bold text-[#0A2540] mb-1">Create your account</h1>

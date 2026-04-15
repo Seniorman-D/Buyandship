@@ -2,12 +2,13 @@
 
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Package, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -51,11 +52,8 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-lg">
-        <Link href="/" className="flex items-center gap-2 mb-8 justify-center">
-          <Package className="h-7 w-7 text-[#F97316]" />
-          <span className="text-[#0A2540] font-bold text-lg">
-            BuyandShip<span className="text-[#F97316]">Nigeria</span>
-          </span>
+        <Link href="/" className="flex items-center justify-center mb-8">
+          <Image src="/logo.png" alt="BuyandShip Nigeria" width={180} height={54} className="h-12 w-auto" />
         </Link>
 
         <h1 className="text-2xl font-bold text-[#0A2540] mb-1">Welcome back</h1>

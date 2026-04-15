@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 import {
   Package, Plus, LogOut, Copy, CheckCircle, User, Edit2, KeyRound, Eye, EyeOff,
 } from 'lucide-react';
@@ -203,9 +204,8 @@ function CustomerDashboardContent() {
       {/* Header */}
       <header className="bg-[#0A2540] text-white px-4 py-4">
         <div className="container mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Package className="h-6 w-6 text-[#F97316]" />
-            <span className="font-bold">BuyandShip<span className="text-[#F97316]">Nigeria</span></span>
+          <Link href="/" className="flex items-center">
+            <Image src="/logo-white.png" alt="BuyandShip Nigeria" width={140} height={42} className="h-9 w-auto" />
           </Link>
           <div className="flex items-center gap-3">
             <span className="text-slate-300 text-sm hidden sm:block">{profile?.full_name}</span>
