@@ -68,6 +68,7 @@ export default function ShipYourselfPage() {
     deliveryAddress: '',
     weightKg: '',
   });
+  const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState('');
   const [policyWarnings, setPolicyWarnings] = useState<string[]>([]);
@@ -161,10 +162,30 @@ export default function ShipYourselfPage() {
     setFormLoading(true);
     setFormError('');
     try {
+      // Upload invoice to Supabase Storage if provided
+      let invoiceUrl = '';
+      if (invoiceFile) {
+        const supabase = supabaseBrowser();
+        const { data: { session } } = await supabase.auth.getSession();
+        const userId = session?.user.id || 'anon';
+        const ext = invoiceFile.name.split('.').pop()?.toLowerCase() || 'pdf';
+        const path = `${userId}/${Date.now()}.${ext}`;
+        const { error: uploadError } = await supabase.storage
+          .from('invoices')
+          .upload(path, invoiceFile, { upsert: false });
+        if (uploadError) {
+          setFormError('Failed to upload invoice. Please try again.');
+          setFormLoading(false);
+          return;
+        }
+        const { data: urlData } = supabase.storage.from('invoices').getPublicUrl(path);
+        invoiceUrl = urlData.publicUrl;
+      }
+
       const res = await fetch('/api/shipping', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, customerName: verifiedName }),
+        body: JSON.stringify({ ...formData, customerName: verifiedName, invoiceUrl }),
       });
       const data = await res.json();
       if (data.error) {
@@ -453,6 +474,33 @@ export default function ShipYourselfPage() {
                     const r = calculateShippingCost(formData.origin, parseFloat(formData.weightKg));
                     return `${r.currency === 'GBP' ? '£' : '$'}${r.amount.toFixed(2)} — ${r.note}`;
                   })()}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="invoice">
+                Invoice / Receipt
+                {formData.origin === 'UK' && isGadget(formData.itemName) && (
+                  <span className="ml-2 text-xs font-semibold text-red-600">* Required for UK electronics</span>
+                )}
+              </Label>
+              <input
+                id="invoice"
+                type="file"
+                accept="image/*,.pdf"
+                onChange={(e) => setInvoiceFile(e.target.files?.[0] || null)}
+                className="mt-1 w-full text-sm file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-[#0A2540] file:text-white hover:file:bg-[#0A2540]/90 file:cursor-pointer"
+              />
+              <p className="text-xs text-slate-400 mt-1">
+                Upload your receipt or seller invoice (JPG, PNG, or PDF).
+                {formData.origin === 'UK'
+                  ? ' Required for electronics — must show your registered account name.'
+                  : ' Strongly recommended to avoid customs delays.'}
+              </p>
+              {invoiceFile && (
+                <p className="text-xs text-green-600 mt-1">
+                  ✓ {invoiceFile.name} ({(invoiceFile.size / 1024).toFixed(0)} KB) selected
                 </p>
               )}
             </div>

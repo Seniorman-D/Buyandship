@@ -3,6 +3,8 @@ import { verifyNIN } from '@/lib/prembly';
 import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const { nin } = await req.json();
@@ -18,6 +20,21 @@ export async function POST(req: NextRequest) {
       const supabase = supabaseRoute();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Enforce NIN uniqueness: check if this NIN is already registered to a DIFFERENT account
+        const { data: existing } = await supabaseAdmin
+          .from('customers')
+          .select('id')
+          .eq('nin', nin)
+          .neq('id', user.id)
+          .maybeSingle();
+
+        if (existing) {
+          return NextResponse.json(
+            { verified: false, error: 'This NIN is already registered to another account. Each NIN can only be used once.' },
+            { status: 409 }
+          );
+        }
+
         // Upsert so we create the row if it was never saved (pre-fix registrations)
         const meta = user.user_metadata || {};
         await supabaseAdmin

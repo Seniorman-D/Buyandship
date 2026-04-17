@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendShippingConfirmedEmail } from '@/lib/email';
-import { isGadget } from '@/lib/rates';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,17 +23,12 @@ export async function POST(req: NextRequest) {
       declaredCurrency,
       deliveryAddress,
       weightKg,
-      customerName,
+      invoiceUrl,
     } = body;
 
     // Validate required fields
     if (!origin || !itemName || !trackingNumber || !deliveryAddress) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    // Policy checks
-    if (origin === 'UK' && isGadget(itemName)) {
-      return NextResponse.json({ error: 'Gadgets and electronics cannot be shipped from the UK.' }, { status: 400 });
     }
 
     // Get or auto-create customer profile (handles pre-fix registrations with no customers row)
@@ -79,6 +75,7 @@ export async function POST(req: NextRequest) {
         declared_currency: declaredCurrency,
         actual_weight_kg: weightKg ? parseFloat(weightKg) : null,
         delivery_address: deliveryAddress,
+        invoice_url: invoiceUrl || null,
         status: 'pending',
         status_history: [{ status: 'pending', timestamp: new Date().toISOString() }],
       })
@@ -106,7 +103,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   try {
     const supabase = supabaseRoute();
     const { data: { user } } = await supabase.auth.getUser();

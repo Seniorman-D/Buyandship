@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { supabaseRoute } from '@/lib/supabase-route';
 
+export const dynamic = 'force-dynamic';
+
 const PAGE_SIZE = 20;
 
 async function isAdmin(): Promise<boolean> {

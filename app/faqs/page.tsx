@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     q: 'What items are prohibited?',
-    a: "We do not ship: weapons, drugs, hazardous materials, perishable food items, live animals, counterfeit goods, or any items prohibited by Nigerian customs law. Electronics from the UK are also excluded.",
+    a: "We do not ship: weapons, drugs, hazardous materials, perishable food items, live animals, counterfeit goods, or any items prohibited by Nigerian customs law. Gadgets and electronics from the UK are allowed but require a receipt and invoice matching your registered account name exactly.",
   },
   {
     q: 'What happens if my item is lost or damaged?',

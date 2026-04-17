@@ -14,7 +14,7 @@ CREATE TABLE customers (
   full_name text NOT NULL,
   email text UNIQUE NOT NULL,
   phone text,
-  nin text,
+  nin text UNIQUE,
   nin_verified boolean DEFAULT false,
   id_document_url text,
   created_at timestamptz DEFAULT now()
@@ -57,6 +57,7 @@ CREATE TABLE shipping_requests (
   ),
   status_history jsonb DEFAULT '[]',
   notes text,
+  invoice_url text,
   created_at timestamptz DEFAULT now()
 );
 
@@ -170,3 +171,28 @@ CREATE INDEX idx_shipping_tracking ON shipping_requests(tracking_number);
 CREATE INDEX idx_procurement_customer_id ON procurement_requests(customer_id);
 CREATE INDEX idx_procurement_status ON procurement_requests(status);
 CREATE INDEX idx_customers_email ON customers(email);
+CREATE INDEX idx_customers_nin ON customers(nin) WHERE nin IS NOT NULL;
+
+-- ============================================================
+-- STORAGE — invoices bucket
+-- ============================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('invoices', 'invoices', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Authenticated users can upload to their own sub-folder
+CREATE POLICY "Users can upload own invoices" ON storage.objects
+  FOR INSERT WITH CHECK (
+    bucket_id = 'invoices'
+    AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+-- Anyone can read (URLs are not guessable — include user UUID + timestamp)
+CREATE POLICY "Anyone can view invoices" ON storage.objects
+  FOR SELECT USING (bucket_id = 'invoices');
+
+-- ============================================================
+-- LIVE DATABASE PATCH (run separately if schema already exists)
+-- ALTER TABLE customers ADD CONSTRAINT customers_nin_unique UNIQUE (nin);
+-- ALTER TABLE shipping_requests ADD COLUMN IF NOT EXISTS invoice_url text;
+-- ============================================================

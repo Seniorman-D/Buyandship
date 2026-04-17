@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, ChevronLeft, ChevronRight, Edit2 } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Edit2, FileText } from 'lucide-react';
 import { formatDate, STATUS_LABELS, cn } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
@@ -98,6 +98,7 @@ export default function AdminShipping() {
                     <th className="px-4 py-3 text-left">Tracking</th>
                     <th className="px-4 py-3 text-left">Origin</th>
                     <th className="px-4 py-3 text-left">Cost</th>
+                    <th className="px-4 py-3 text-left">Invoice</th>
                     <th className="px-4 py-3 text-left">Status</th>
                     <th className="px-4 py-3 text-left">Payment</th>
                     <th className="px-4 py-3 text-left">Date</th>
@@ -116,6 +117,21 @@ export default function AdminShipping() {
                           {r.estimated_cost
                             ? `${r.estimated_currency === 'GBP' ? '£' : '$'}${r.estimated_cost.toFixed(2)}`
                             : '—'}
+                        </td>
+                        <td className="px-4 py-3">
+                          {r.invoice_url ? (
+                            <a
+                              href={r.invoice_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                              title="View invoice"
+                            >
+                              <FileText className="h-3.5 w-3.5" /> View
+                            </a>
+                          ) : (
+                            <span className="text-xs text-slate-300">—</span>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <span className="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-700 font-medium">
@@ -141,7 +157,7 @@ export default function AdminShipping() {
                       </tr>
                       {editingId === r.id && (
                         <tr key={`edit-${r.id}`}>
-                          <td colSpan={9} className="px-4 py-3 bg-blue-50">
+                          <td colSpan={10} className="px-4 py-3 bg-blue-50">
                             <div className="flex items-center gap-3 flex-wrap">
                               <select
                                 value={newStatus}

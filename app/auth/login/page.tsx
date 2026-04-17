@@ -43,9 +43,10 @@ function LoginForm() {
       .single();
 
     if (adminData) {
-      router.push('/admin/dashboard');
+      // Full reload ensures middleware sees fresh session cookie on protected admin pages
+      window.location.href = '/admin/dashboard';
     } else {
-      router.push(redirectTo);
+      window.location.href = redirectTo;
     }
   }
 

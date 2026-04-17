@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, ShieldCheck, AlertTriangle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Origin } from '@/lib/rates';
+import { supabaseBrowser } from '@/lib/supabase';
 
 interface ProductLink {
   url: string;
@@ -24,8 +25,21 @@ const EMPTY_PRODUCT = (): ProductLink => ({
   url: '', description: '', quantity: 1, estimatedPrice: 0, currency: 'USD', notes: '',
 });
 
+type VerifyStep = 'verify' | 'form';
+
 export default function ProcurePage() {
   const router = useRouter();
+
+  const [verifyStep, setVerifyStep] = useState<VerifyStep>('verify');
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [verifiedName, setVerifiedName] = useState('');
+
+  // NIN gate state
+  const [nin, setNin] = useState('');
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [verifyError, setVerifyError] = useState('');
+  const [useDocFallback, setUseDocFallback] = useState(false);
+  const [docFullName, setDocFullName] = useState('');
 
   const [origin, setOrigin] = useState<Origin>('USA');
   const [deliveryAddress, setDeliveryAddress] = useState('');
@@ -33,6 +47,63 @@ export default function ProcurePage() {
   const [generalNotes, setGeneralNotes] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [formError, setFormError] = useState('');
+
+  // On mount: check if user is authenticated and NIN-verified — skip verify step
+  useEffect(() => {
+    async function checkVerified() {
+      const supabase = supabaseBrowser();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = '/auth/login?redirect=/procure';
+        return;
+      }
+      const { data: profile } = await supabase
+        .from('customers')
+        .select('full_name, nin_verified')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profile?.nin_verified) {
+        const name = profile.full_name ||
+          (session.user.user_metadata?.full_name as string) || '';
+        setVerifiedName(name);
+        setVerifyStep('form');
+      }
+      setCheckingAuth(false);
+    }
+    checkVerified();
+  }, []);
+
+  async function handleNinVerify(e: React.FormEvent) {
+    e.preventDefault();
+    setVerifyLoading(true);
+    setVerifyError('');
+    try {
+      const res = await fetch('/api/verify-nin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nin }),
+      });
+      const data = await res.json();
+      if (data.verified) {
+        setVerifiedName(`${data.firstName} ${data.lastName}`);
+        setVerifyStep('form');
+      } else {
+        setVerifyError(data.error || 'Verification failed');
+      }
+    } catch {
+      setVerifyError('Verification service unavailable. Please try the document upload option.');
+    } finally {
+      setVerifyLoading(false);
+    }
+  }
+
+  async function handleDocSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!docFullName.trim()) { setVerifyError('Please enter your full name.'); return; }
+    setVerifiedName(docFullName);
+    setVerifyStep('form');
+  }
 
   const subtotal = products.reduce((sum, p) => sum + (p.estimatedPrice || 0) * (p.quantity || 1), 0);
   const procurementFee = subtotal * 0.05;
@@ -89,6 +160,16 @@ export default function ProcurePage() {
 
   const origins: Origin[] = ['USA', 'UK', 'CHINA'];
 
+  if (checkingAuth) {
+    return (
+      <PublicLayout>
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <div className="animate-spin w-8 h-8 border-4 border-[#0A2540] border-t-transparent rounded-full" />
+        </div>
+      </PublicLayout>
+    );
+  }
+
   return (
     <PublicLayout>
       <div className="bg-[#0A2540]/80 border-b border-white/10 px-4 py-2">
@@ -109,6 +190,76 @@ export default function ProcurePage() {
       </div>
 
       <div className="container mx-auto max-w-2xl px-4 py-14">
+
+        {/* NIN Verification Gate */}
+        {verifyStep === 'verify' && (
+          <div className="bg-white border border-slate-200 rounded-xl p-6 mb-8">
+            <div className="flex items-center gap-3 mb-5">
+              <ShieldCheck className="h-6 w-6 text-[#0A2540]" />
+              <h2 className="text-xl font-bold text-[#0A2540]">Identity Verification Required</h2>
+            </div>
+            <p className="text-slate-600 text-sm mb-6">
+              You must verify your identity before submitting a procurement request. Your NIN is used for KYC compliance only.
+            </p>
+
+            {!useDocFallback ? (
+              <form onSubmit={handleNinVerify} className="space-y-4">
+                <div>
+                  <Label htmlFor="nin">National Identification Number (NIN)</Label>
+                  <Input
+                    id="nin"
+                    type="text"
+                    maxLength={11}
+                    placeholder="Enter your 11-digit NIN"
+                    value={nin}
+                    onChange={(e) => setNin(e.target.value.replace(/\D/g, ''))}
+                    className="mt-1"
+                  />
+                </div>
+                {verifyError && (
+                  <div className="text-red-600 text-sm flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" /> {verifyError}
+                  </div>
+                )}
+                <Button type="submit" className="w-full" disabled={verifyLoading || nin.length !== 11}>
+                  {verifyLoading ? 'Verifying...' : 'Verify NIN'}
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => { setUseDocFallback(true); setVerifyError(''); }}
+                  className="w-full text-sm text-slate-500 hover:text-[#0A2540] transition-colors"
+                >
+                  I don&apos;t have my NIN — use ID document instead
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleDocSubmit} className="space-y-4">
+                <div>
+                  <Label htmlFor="doc-name">Full Name (as on ID)</Label>
+                  <Input
+                    id="doc-name"
+                    type="text"
+                    placeholder="Your full legal name"
+                    value={docFullName}
+                    onChange={(e) => setDocFullName(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                  <Info className="h-3 w-3 inline mr-1" />
+                  Document submission requires manual review (24–48 hours). Use NIN for instant verification.
+                </div>
+                {verifyError && <p className="text-red-600 text-sm">{verifyError}</p>}
+                <Button type="submit" className="w-full">Proceed with Document Review</Button>
+                <button type="button" onClick={() => setUseDocFallback(false)} className="w-full text-sm text-slate-500">
+                  Back to NIN verification
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {verifyStep === 'form' && (
         <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* Origin */}
@@ -297,6 +448,8 @@ export default function ProcurePage() {
             Our team reviews your request within 24 hours and sends a confirmed cost to your dashboard for payment.
           </p>
         </form>
+        )}
+
       </div>
     </PublicLayout>
   );

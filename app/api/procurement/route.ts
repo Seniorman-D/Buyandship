@@ -3,6 +3,8 @@ import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendProcurementReceivedEmail } from '@/lib/email';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const supabase = supabaseRoute();

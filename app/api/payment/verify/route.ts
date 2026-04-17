@@ -3,6 +3,8 @@ import { verifyPaystackPayment } from '@/lib/paystack';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendPaymentConfirmedEmail } from '@/lib/email';
 
+export const dynamic = 'force-dynamic';
+
 // This route handles both:
 // 1. GET: Paystack redirect callback (user comes back from Paystack)
 // 2. POST: Paystack webhook (Paystack posts to this URL on payment events)

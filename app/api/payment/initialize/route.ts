@@ -3,6 +3,8 @@ import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { initializePaystackPayment, generateReference } from '@/lib/paystack';
 
+export const dynamic = 'force-dynamic';
+
 async function getFxRates(): Promise<Record<string, number>> {
   const { data } = await supabaseAdmin
     .from('settings')
