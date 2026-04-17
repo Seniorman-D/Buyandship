@@ -5,23 +5,26 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://buyandshiptonigeria.com'),
+  metadataBase: new URL('https://buyandshiptonigeria.com'),
   title: {
-    default: 'BuyandShip Nigeria – Ship from USA, UK & China to Nigeria',
+    default: 'BuyandShip Nigeria — Ship from US, UK & China to Nigeria | $9/lb',
     template: '%s | BuyandShip Nigeria',
   },
   description:
-    'Shop from the USA, UK, and China and ship to Nigeria at the cheapest rates. BuyandShip Nigeria offers reliable international shipping, procurement, and delivery services.',
+    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7–14 day delivery. Free account.',
   keywords: [
-    'ship from USA to Nigeria',
+    'ship from US to Nigeria',
     'ship from UK to Nigeria',
-    'ship from China to Nigeria',
     'buy and ship Nigeria',
-    'cheapest international shipping Nigeria',
-    'shop America ship Nigeria',
-    'buyandship Nigeria',
-    'Nigeria shipping agent',
     'international shipping Nigeria',
+    'cheap shipping Nigeria',
+    'no customs duty Nigeria',
+    'Amazon to Nigeria shipping',
+    'procurement service Nigeria',
+    'shipping forwarding Nigeria',
+    'shop abroad ship to Nigeria',
+    'ship from China to Nigeria',
+    'Nigeria shipping agent',
   ],
   authors: [{ name: 'BuyandShip Nigeria' }],
   openGraph: {
@@ -29,16 +32,16 @@ export const metadata: Metadata = {
     locale: 'en_NG',
     url: 'https://buyandshiptonigeria.com',
     siteName: 'BuyandShip Nigeria',
-    title: 'BuyandShip Nigeria – Shop Anywhere. Ship to Nigeria.',
+    title: 'Ship from US, UK & China to Nigeria — BuyandShip',
     description:
-      'Ship from USA, UK & China to Nigeria at unbeatable rates. Fast, reliable, and trusted.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+      'Cheapest rates. No hidden fees. Shop anywhere, delivered to your door in Nigeria.',
+    images: [{ url: 'https://buyandshiptonigeria.com/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BuyandShip Nigeria – Ship from USA, UK & China',
-    description: 'Shop Anywhere. Ship to Nigeria.',
-    images: ['/og-image.png'],
+    title: 'Ship from US, UK & China to Nigeria — BuyandShip',
+    description: 'Cheapest rates. No hidden fees. Shop anywhere, delivered to your door in Nigeria.',
+    images: ['https://buyandshiptonigeria.com/og-image.png'],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://buyandshiptonigeria.com' },

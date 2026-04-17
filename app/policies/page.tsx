@@ -4,6 +4,7 @@ import { PublicLayout } from '@/components/layout/PublicLayout';
 export const metadata: Metadata = {
   title: 'Policies – BuyandShip Nigeria',
   description: 'Terms of service, privacy policy, shipping policies, and prohibited items for BuyandShip Nigeria.',
+  alternates: { canonical: 'https://buyandshiptonigeria.com/policies' },
 };
 
 const sections = [

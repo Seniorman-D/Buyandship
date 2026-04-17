@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { supabaseRoute } from '@/lib/supabase-route';
+import { sendPostDeliveryAutomation } from '@/lib/email-automation';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,5 +50,21 @@ export async function PATCH(req: NextRequest) {
     .eq('id', id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Fire post-delivery email +3 days after delivery (fire-and-forget; schedule via cron)
+  if (status === 'delivered') {
+    const { data: req2 } = await supabaseAdmin
+      .from('shipping_requests')
+      .select('customer_id, customers(full_name, email)')
+      .eq('id', id)
+      .single();
+    const customer = (req2 as any)?.customers;
+    if (customer) {
+      // In production: schedule this 3 days out via a job queue or cron
+      // For now, fire immediately so teams can test email content
+      sendPostDeliveryAutomation({ id: req2!.customer_id, email: customer.email, full_name: customer.full_name }).catch(console.error);
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }

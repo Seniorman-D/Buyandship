@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { sendWelcomeAutomation } from '@/lib/email-automation';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,8 +12,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Use service role to bypass RLS — safe because we validate the userId
-    // came from a real Supabase auth.signUp() call (the user exists in auth.users)
     const { error } = await supabaseAdmin
       .from('customers')
       .upsert(
@@ -22,6 +23,9 @@ export async function POST(req: NextRequest) {
       console.error('Register API error:', error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Fire welcome email immediately (non-blocking)
+    sendWelcomeAutomation({ id: userId, email, full_name: fullName }).catch(console.error);
 
     return NextResponse.json({ success: true });
   } catch (err) {

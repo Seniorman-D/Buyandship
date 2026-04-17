@@ -5,6 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 export const metadata: Metadata = {
   title: 'FAQs – BuyandShip Nigeria',
   description: 'Frequently asked questions about shipping from USA, UK, and China to Nigeria with BuyandShip Nigeria.',
+  alternates: { canonical: 'https://buyandshiptonigeria.com/faqs' },
 };
 
 const faqs = [
@@ -86,23 +87,74 @@ const faqs = [
   },
 ];
 
-const jsonLd = {
+const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How does BuyandShip Nigeria work?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Create a free account, get your personal US, UK, or China warehouse address, shop on any store and ship to that address, then we forward your package to your door in Nigeria.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are the shipping rates?',
+      acceptedAnswer: { '@type': 'Answer', text: 'USA: $9 per pound (minimum $35). UK: £9 per kilogram (minimum £45). China: $10 per kilogram (minimum $30). No hidden fees.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does shipping take?',
+      acceptedAnswer: { '@type': 'Answer', text: 'USA and UK shipments arrive in 7–14 business days from warehouse receipt. China shipments take 14–21 business days.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I pay customs duty?',
+      acceptedAnswer: { '@type': 'Answer', text: 'BuyandShip Nigeria handles customs documentation. Declare accurate item values to avoid delays. Items over £200 (UK) or $300 (USA/China) require a declaration.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the procurement service?',
+      acceptedAnswer: { '@type': 'Answer', text: 'If you cannot shop on foreign websites yourself, we buy the item for you for a 5% service fee of the item cost, plus standard shipping rates.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I ship electronics from the UK?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. Electronics and gadgets from the UK are allowed. The receipt and invoice must match your registered account name.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I track my shipment?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Track your shipment at buyandshiptonigeria.com/track using your tracking number. You will also receive email updates at each stage.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you deliver to all states in Nigeria?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. BuyandShip Nigeria delivers to all states across Nigeria.' },
+    },
+    ...faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  ].filter((item, index, arr) =>
+    arr.findIndex((i) => i.name === item.name) === index
+  ),
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://buyandshiptonigeria.com' },
+    { '@type': 'ListItem', position: 2, name: 'FAQs', item: 'https://buyandshiptonigeria.com/faqs' },
+  ],
 };
 
 export default function FAQsPage() {
   return (
     <PublicLayout>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <div className="bg-[#0A2540] text-white py-14 px-4">
         <div className="container mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-bold mb-3">Frequently Asked Questions</h1>

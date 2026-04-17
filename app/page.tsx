@@ -8,25 +8,71 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'BuyandShip Nigeria – Ship from USA, UK & China to Nigeria',
+  title: 'BuyandShip Nigeria — Ship from US, UK & China to Nigeria | $9/lb',
   description:
-    'Shop from the USA, UK, and China and ship to Nigeria at the cheapest rates. BuyandShip Nigeria – fast, reliable, trusted.',
+    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7–14 day delivery. Free account.',
+  alternates: { canonical: 'https://buyandshiptonigeria.com' },
 };
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
+  '@type': 'Service',
   name: 'BuyandShip Nigeria',
-  description: 'International shipping and procurement service – USA, UK, China to Nigeria',
-  url: 'https://buyandshiptonigeria.com',
-  telephone: '+2348029155825',
-  email: 'admin@buyandshiptonigeria.com',
-  address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'NG',
+  description:
+    'International shipping forwarding from USA, UK, and China to Nigeria. Shop from Amazon, ASOS, Walmart and more — we ship directly to your door in Nigeria at $9/lb from the US, £9/kg from the UK, and $10/kg from China.',
+  provider: {
+    '@type': 'Organization',
+    name: 'BuyandShip Nigeria',
+    url: 'https://buyandshiptonigeria.com',
+    logo: 'https://buyandshiptonigeria.com/logo-white.png',
+    email: 'admin@buyandshiptonigeria.com',
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+2348029155825',
+      contactType: 'customer service',
+      availableLanguage: 'English',
+      hoursAvailable: 'Mo-Fr 09:00-17:00',
+    },
+    sameAs: [
+      'https://www.instagram.com/buyandshiptonigeria',
+      'https://wa.me/2348029155825',
+    ],
   },
-  openingHours: 'Mo-Fr 09:00-17:00',
-  priceRange: '$$',
+  areaServed: { '@type': 'Country', name: 'Nigeria' },
+  serviceType: 'Shipping Forwarding',
+  offers: [
+    {
+      '@type': 'Offer',
+      name: 'USA to Nigeria Shipping',
+      description: 'Ship from USA to Nigeria at $9 per pound. Minimum charge $35. Delivery in 7–14 business days.',
+      price: '9',
+      priceCurrency: 'USD',
+      eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
+    },
+    {
+      '@type': 'Offer',
+      name: 'UK to Nigeria Shipping',
+      description: 'Ship from UK to Nigeria at £9 per kilogram. Minimum charge £45. Delivery in 7–14 business days.',
+      price: '9',
+      priceCurrency: 'GBP',
+      eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
+    },
+    {
+      '@type': 'Offer',
+      name: 'China to Nigeria Shipping',
+      description: 'Ship from China to Nigeria at $10 per kilogram. Minimum charge $30. Delivery in 14–21 business days.',
+      price: '10',
+      priceCurrency: 'USD',
+      eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
+    },
+    {
+      '@type': 'Offer',
+      name: 'Procurement Service',
+      description: 'We shop on your behalf from US, UK, and China stores. 5% service fee of item cost plus standard shipping rates.',
+      price: '5',
+      priceCurrency: 'USD',
+    },
+  ],
 };
 
 const steps = [
@@ -43,7 +89,7 @@ const rates = [
   },
   {
     flag: '🇬🇧', origin: 'UK', rate: '£9/kg', min: '5kg minimum (£45)',
-    color: 'border-red-500', badge: 'No Gadgets',
+    color: 'border-red-500', badge: 'Gadgets OK',
   },
   {
     flag: '🇨🇳', origin: 'China', rate: '$10/kg', min: '3kg minimum ($30)',

@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { supabaseBrowser } from '@/lib/supabase';
 
 const navLinks = [
+  { href: '/how-it-works', label: 'How It Works' },
   { href: '/rates', label: 'Rates' },
   { href: '/ship-yourself', label: 'Ship Yourself' },
   { href: '/procure', label: 'Procure' },

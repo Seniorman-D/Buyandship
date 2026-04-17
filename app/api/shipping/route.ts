@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseRoute } from '@/lib/supabase-route';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { sendShippingConfirmedEmail } from '@/lib/email';
+import { sendShipmentConfirmedAutomation } from '@/lib/email-automation';
 
 export const dynamic = 'force-dynamic';
 
@@ -95,6 +96,19 @@ export async function POST(req: NextRequest) {
       trackingNumber,
       origin
     ).catch(console.error);
+
+    // Fire Track B automation only on first-ever shipping request
+    const { count: prevCount } = await supabaseAdmin
+      .from('shipping_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('customer_id', user.id);
+    if ((prevCount ?? 0) <= 1) {
+      sendShipmentConfirmedAutomation(
+        { id: user.id, email: customer.email, full_name: customer.full_name },
+        trackingNumber,
+        requestId
+      ).catch(console.error);
+    }
 
     return NextResponse.json({ id: shippingRequest.id, requestId });
   } catch (error) {

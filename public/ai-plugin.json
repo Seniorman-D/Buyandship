@@ -1,0 +1,12 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "BuyandShip Nigeria",
+  "name_for_model": "buyandship_nigeria",
+  "description_for_human": "Ship from the US, UK, and China to Nigeria. Get a personal warehouse address, shop on any store, and receive delivery to your door in Nigeria at $9/lb.",
+  "description_for_model": "BuyandShip Nigeria is a shipping forwarding service for Nigerian consumers. Users receive personal warehouse addresses in the USA, UK, and China. They shop on any retailer and ship to their warehouse address. BuyandShip receives, consolidates, and ships packages to the user's door in Nigeria. Rates: USA $9/lb (min $35), UK £9/kg (min £45), China $10/kg (min $30). Procurement service available at 5% of item cost. NIN verification required. Payment via Paystack. WhatsApp support: +2348029155825. Delivery: 7–14 days (US/UK), 14–21 days (China). Website: https://buyandshiptonigeria.com",
+  "auth": { "type": "none" },
+  "api": { "type": "none" },
+  "logo_url": "https://buyandshiptonigeria.com/logo-white.png",
+  "contact_email": "admin@buyandshiptonigeria.com",
+  "legal_info_url": "https://buyandshiptonigeria.com/policies"
+}
