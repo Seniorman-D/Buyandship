@@ -94,9 +94,9 @@ const steps = [
     mock: (
       <div className="space-y-3">
         {[
-          { flag: '🇺🇸', label: 'US Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: '145 Hook Creek Blvd, Bldg B6A', line3: 'Valley Stream, NY 11581, USA' },
-          { flag: '🇬🇧', label: 'UK Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: 'Unit 13A Heathway Industrial Estate', line3: 'Dagenham, RM10 8PN, UK' },
-          { flag: '🇨🇳', label: 'China Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: '+2348029155825', line3: 'Guangzhou, Guangdong, China' },
+          { flag: '🇺🇸', label: 'US Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: '123 Warehouse Ave, Suite #00001', line3: 'New York, NY 10001, USA' },
+          { flag: '🇬🇧', label: 'UK Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: '45 Logistics Park, Unit B2', line3: 'London, E1 6RF, UK' },
+          { flag: '🇨🇳', label: 'China Warehouse', line1: 'BUYANDSHIP — JOHN DOE', line2: 'Your phone number on label', line3: 'Guangzhou, Guangdong, China' },
         ].map((addr) => (
           <div key={addr.flag} className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-start gap-3">
             <span className="text-2xl">{addr.flag}</span>
@@ -126,10 +126,10 @@ const steps = [
         <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Checkout — Delivery Address</p>
         {[
           ['Full Name', 'BUYANDSHIP — YOUR NAME'],
-          ['Address Line 1', '145 Hook Creek Blvd, Bldg B6A'],
-          ['City', 'Valley Stream'],
+          ['Address Line 1', '123 Warehouse Ave, Suite #00001'],
+          ['City', 'New York'],
           ['State', 'New York (NY)'],
-          ['ZIP Code', '11581'],
+          ['ZIP Code', '10001'],
           ['Country', 'United States'],
         ].map(([label, val]) => (
           <div key={label}>
