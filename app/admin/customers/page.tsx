@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { Search, CheckCircle, XCircle, ChevronLeft, ChevronRight, RefreshCw, Mail } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
@@ -17,6 +17,8 @@ export default function AdminCustomers() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
   const [syncMsg, setSyncMsg] = useState('');
+  const [blasting, setBlasting] = useState(false);
+  const [blastMsg, setBlastMsg] = useState('');
 
   async function load() {
     setLoading(true);
@@ -40,6 +42,28 @@ export default function AdminCustomers() {
     setSyncing(false);
   }
 
+  async function handleVerificationBlast() {
+    // Dry run first to show count
+    const preview = await fetch('/api/admin/verification-blast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dryRun: true }),
+    });
+    const previewData = await preview.json();
+    if (!window.confirm(`Send verification nudge email to ${previewData.count} unverified customer(s)? This cannot be undone.`)) return;
+
+    setBlasting(true);
+    setBlastMsg('');
+    const res = await fetch('/api/admin/verification-blast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dryRun: false }),
+    });
+    const data = await res.json();
+    setBlastMsg(`✅ Sent ${data.sent} of ${data.total} verification emails.${data.failed ? ` (${data.failed} failed)` : ''}`);
+    setBlasting(false);
+  }
+
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
@@ -47,13 +71,22 @@ export default function AdminCustomers() {
       <div className="max-w-6xl">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-[#0A2540]">Customers ({total})</h1>
-          <Button onClick={handleSync} disabled={syncing} size="sm" variant="outline" className="flex items-center gap-2">
-            <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
-            {syncing ? 'Syncing...' : 'Sync All Customers'}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleVerificationBlast} disabled={blasting} size="sm" variant="outline" className="flex items-center gap-2 border-orange-300 text-orange-700 hover:bg-orange-50">
+              <Mail className="h-4 w-4" />
+              {blasting ? 'Sending...' : 'Email Unverified Users'}
+            </Button>
+            <Button onClick={handleSync} disabled={syncing} size="sm" variant="outline" className="flex items-center gap-2">
+              <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+              {syncing ? 'Syncing...' : 'Sync All Customers'}
+            </Button>
+          </div>
         </div>
         {syncMsg && (
-          <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 mb-4">{syncMsg}</p>
+          <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 mb-3">{syncMsg}</p>
+        )}
+        {blastMsg && (
+          <p className="text-sm text-orange-700 bg-orange-50 border border-orange-200 rounded-lg px-4 py-2 mb-3">{blastMsg}</p>
         )}
 
         {/* Search */}

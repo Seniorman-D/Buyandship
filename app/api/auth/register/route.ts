@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-import { sendWelcomeAutomation } from '@/lib/email-automation';
+import { sendWelcomeAutomation, scheduleDripSequence } from '@/lib/email-automation';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,8 +24,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Fire welcome email immediately (non-blocking)
-    sendWelcomeAutomation({ id: userId, email, full_name: fullName }).catch(console.error);
+    // Fire welcome email immediately, then schedule the full drip sequence (non-blocking)
+    const automationUser = { id: userId, email, full_name: fullName };
+    sendWelcomeAutomation(automationUser).catch(console.error);
+    scheduleDripSequence(automationUser).catch(console.error);
 
     return NextResponse.json({ success: true });
   } catch (err) {

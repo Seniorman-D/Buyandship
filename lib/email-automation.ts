@@ -15,8 +15,74 @@ function firstName(fullName: string) {
   return fullName.split(' ')[0];
 }
 
-// Track A — drip sequence triggered on signup
-// Each function checks conditions before sending (fire-and-forget pattern)
+function daysFromNow(days: number): string {
+  return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+// ─── TRACK A — Drip sequence scheduled on signup ────────────────────────────
+// All 5 emails are pre-scheduled at once via Resend's scheduledAt.
+// Each function still re-checks conditions at call time for immediate sends.
+// Note: Resend scheduledAt requires a paid Resend plan.
+
+export async function scheduleDripSequence(user: AutomationUser) {
+  const name = firstName(user.full_name);
+
+  const [
+    HowToGuideEmail,
+    VerifyIdentityEmail,
+    NurtureValueEmail,
+    NurtureObjectionsEmail,
+    UrgencyEmail,
+  ] = await Promise.all([
+    import('@/emails/HowToGuideEmail').then((m) => m.HowToGuideEmail),
+    import('@/emails/VerifyIdentityEmail').then((m) => m.VerifyIdentityEmail),
+    import('@/emails/NurtureValueEmail').then((m) => m.NurtureValueEmail),
+    import('@/emails/NurtureObjectionsEmail').then((m) => m.NurtureObjectionsEmail),
+    import('@/emails/UrgencyEmail').then((m) => m.UrgencyEmail),
+  ]);
+
+  // Schedule all 5 emails in parallel (fire-and-forget)
+  await Promise.allSettled([
+    // scheduledAt is supported by the Resend API but not yet typed in v3 SDK — cast via any
+    (resend.emails.send as any)({
+      from: FROM,
+      to: user.email,
+      subject: '📦 Your complete guide to shipping from the US, UK & China',
+      react: HowToGuideEmail({ firstName: name }),
+      scheduledAt: daysFromNow(1),
+    }),
+    (resend.emails.send as any)({
+      from: FROM,
+      to: user.email,
+      subject: `⚠️ ${name}, your account isn't fully activated yet`,
+      react: VerifyIdentityEmail({ firstName: name }),
+      scheduledAt: daysFromNow(2),
+    }),
+    (resend.emails.send as any)({
+      from: FROM,
+      to: user.email,
+      subject: 'What ₦50,000 actually buys you on Amazon right now 👀',
+      react: NurtureValueEmail({ firstName: name }),
+      scheduledAt: daysFromNow(4),
+    }),
+    (resend.emails.send as any)({
+      from: FROM,
+      to: user.email,
+      subject: 'The #1 fear people have about shipping from abroad (and the truth)',
+      react: NurtureObjectionsEmail({ firstName: name }),
+      scheduledAt: daysFromNow(7),
+    }),
+    (resend.emails.send as any)({
+      from: FROM,
+      to: user.email,
+      subject: `${name}, this offer expires Friday 🕐`,
+      react: UrgencyEmail({ firstName: name }),
+      scheduledAt: daysFromNow(14),
+    }),
+  ]);
+}
+
+// ─── IMMEDIATE SENDS (condition-checked at call time) ────────────────────────
 
 export async function sendWelcomeAutomation(user: AutomationUser) {
   const { WelcomeEmail } = await import('@/emails/WelcomeEmail');
@@ -106,7 +172,7 @@ export async function sendUrgencyAutomation(user: AutomationUser) {
   }).catch(console.error);
 }
 
-// Track B — triggered by events
+// ─── TRACK B — Event-triggered ───────────────────────────────────────────────
 
 export async function sendShipmentConfirmedAutomation(user: AutomationUser, trackingNumber?: string, requestId?: string) {
   const { ShipmentConfirmedEmail } = await import('@/emails/ShipmentConfirmedEmail');
