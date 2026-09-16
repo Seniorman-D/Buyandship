@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -18,9 +17,7 @@ export default function SignupPage() {
     confirmPassword: '',
   });
   const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
   function validatePhone(phone: string) {
     // Nigerian: 11 digits starting with 0 (070x, 080x, 081x, 090x, 091x)
@@ -28,7 +25,7 @@ export default function SignupPage() {
     return /^(0[7-9][01]\d{8}|\+234[7-9][01]\d{8})$/.test(phone.replace(/\s/g, ''));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!formData.phone || !validatePhone(formData.phone)) {
       setError('Enter a valid Nigerian phone number (e.g. 08012345678).');
@@ -42,72 +39,8 @@ export default function SignupPage() {
       setError('Password must be at least 8 characters.');
       return;
     }
-    setLoading(true);
     setError('');
-
-    const supabase = supabaseBrowser();
-    const { data, error: authError } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        data: { full_name: formData.fullName, phone: formData.phone },
-        emailRedirectTo: `${window.location.origin}/auth/dashboard`,
-      },
-    });
-
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
-
-    if (data.user) {
-      // Create customer profile via server API (uses service role to bypass RLS,
-      // since signUp with email confirmation returns no session yet so auth.uid()
-      // would be null and the direct client insert would be silently blocked)
-      await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: data.user.id,
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-        }),
-      });
-
-      // Send welcome email
-      try {
-        await fetch('/api/email/welcome', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email, name: formData.fullName }),
-        });
-      } catch {}
-    }
-
-    setSuccess(true);
-    setLoading(false);
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-lg">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="h-8 w-8 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-[#0A2540] mb-2">Check your email!</h2>
-          <p className="text-slate-600 mb-6">
-            We sent a confirmation link to <strong>{formData.email}</strong>.
-            Click the link to activate your account and start shipping.
-          </p>
-          <Link href="/auth/login">
-            <Button className="w-full">Go to Login</Button>
-          </Link>
-        </div>
-      </div>
-    );
+    window.open('https://wa.me/2348029155825', '_blank', 'noopener,noreferrer');
   }
 
   return (
@@ -201,8 +134,8 @@ export default function SignupPage() {
 
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
-          <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
+          <Button type="submit" className="w-full" size="lg">
+            Create Account
           </Button>
         </form>
 

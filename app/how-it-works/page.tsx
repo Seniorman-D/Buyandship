@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { PublicLayout } from '@/components/layout/PublicLayout';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'How It Works — BuyandShip Nigeria',
@@ -344,12 +342,7 @@ export default function HowItWorksPage() {
           <p className="text-slate-300 mb-8">
             Create your free account in 2 minutes. No credit card required.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup">
-              <Button size="lg" className="bg-[#F97316] hover:bg-[#ea6c0a] text-white w-full sm:w-auto">
-                Get Started Free <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
+          <div className="flex justify-center">
             <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
               <Button size="lg" className="bg-green-500 hover:bg-green-600 text-white w-full sm:w-auto">
                 Chat on WhatsApp

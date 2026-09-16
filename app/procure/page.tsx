@@ -260,7 +260,7 @@ export default function ProcurePage() {
         )}
 
         {verifyStep === 'form' && (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
 
           {/* Origin */}
           <div className="bg-white border border-slate-200 rounded-xl p-6">
@@ -440,8 +440,13 @@ export default function ProcurePage() {
 
           {formError && <p className="text-red-600 text-sm px-1">{formError}</p>}
 
-          <Button type="submit" className="w-full" size="lg" disabled={formLoading}>
-            {formLoading ? 'Submitting...' : 'Submit Procurement Request'}
+          <Button
+            type="button"
+            className="w-full"
+            size="lg"
+            onClick={() => window.open('https://wa.me/2348029155825', '_blank', 'noopener,noreferrer')}
+          >
+            Submit Procurement Request
           </Button>
 
           <p className="text-xs text-slate-500 text-center pb-4">

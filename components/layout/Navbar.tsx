@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LayoutDashboard, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { supabaseBrowser } from '@/lib/supabase';
@@ -71,18 +71,12 @@ export function Navbar() {
               </Button>
             </Link>
           ) : (
-            <>
-              <Link href="/auth/login">
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10" size="sm">
-                  Login
-                </Button>
-              </Link>
-              <Link href="/auth/signup">
-                <Button variant="accent" size="sm">
-                  Get Started
-                </Button>
-              </Link>
-            </>
+            <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
+              <Button variant="accent" size="sm" className="flex items-center gap-1.5">
+                <MessageCircle className="h-4 w-4" />
+                Chat on WhatsApp
+              </Button>
+            </a>
           )}
         </div>
 
@@ -124,18 +118,18 @@ export function Navbar() {
                   </Button>
                 </Link>
               ) : (
-                <>
-                  <Link href="/auth/login" className="flex-1" onClick={() => setOpen(false)}>
-                    <Button variant="outline" size="sm" className="w-full border-white/20 text-white hover:bg-white/10">
-                      Login
-                    </Button>
-                  </Link>
-                  <Link href="/auth/signup" className="flex-1" onClick={() => setOpen(false)}>
-                    <Button variant="accent" size="sm" className="w-full">
-                      Get Started
-                    </Button>
-                  </Link>
-                </>
+                <a
+                  href="https://wa.me/2348029155825"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1"
+                  onClick={() => setOpen(false)}
+                >
+                  <Button variant="accent" size="sm" className="w-full flex items-center gap-1.5">
+                    <MessageCircle className="h-4 w-4" />
+                    Chat on WhatsApp
+                  </Button>
+                </a>
               )}
             </div>
           </nav>

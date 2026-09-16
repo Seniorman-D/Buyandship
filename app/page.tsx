@@ -130,11 +130,11 @@ export default function HomePage() {
             Fast, reliable, and 100% trusted.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup">
+            <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
               <Button size="xl" variant="accent" className="w-full sm:w-auto">
-                Get Started Free <ArrowRight className="h-5 w-5 ml-2" />
+                <MessageCircle className="h-5 w-5 mr-2" /> Chat on WhatsApp
               </Button>
-            </Link>
+            </a>
             <Link href="/rates">
               <Button size="xl" variant="ghost" className="w-full sm:w-auto bg-white text-[#0A2540] font-semibold hover:bg-white/90 transition-colors">
                 View Rates
@@ -203,11 +203,11 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link href="/auth/signup">
+            <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
               <Button variant="accent" size="lg">
-                Start Shipping Today <ArrowRight className="h-4 w-4 ml-2" />
+                <MessageCircle className="h-4 w-4 mr-2" /> Start Shipping Today
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -238,14 +238,9 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold text-white mb-4">Ready to start shipping?</h2>
           <p className="text-orange-100 mb-8">
             Join thousands of Nigerians shopping from the USA, UK, and China with ease.
-            Create your free account today.
+            Chat with us to get started today.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup">
-              <Button size="xl" className="bg-white text-[#F97316] hover:bg-orange-50 w-full sm:w-auto">
-                Create Free Account <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-            </Link>
+          <div className="flex justify-center">
             <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
               <Button size="xl" className="bg-green-500 hover:bg-green-600 text-white font-semibold w-full sm:w-auto">
                 <MessageCircle className="h-5 w-5 mr-2" /> Chat on WhatsApp

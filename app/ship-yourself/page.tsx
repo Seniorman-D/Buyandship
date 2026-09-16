@@ -377,7 +377,7 @@ export default function ShipYourselfPage() {
 
         {/* Step 3: Shipping Form */}
         {step === 'form' && (
-          <form onSubmit={handleFormSubmit} className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
+          <form onSubmit={(e) => e.preventDefault()} className="bg-white border border-slate-200 rounded-xl p-6 space-y-5">
             <h2 className="text-xl font-bold text-[#0A2540]">Shipping Request Details</h2>
 
             <div>
@@ -557,12 +557,14 @@ export default function ShipYourselfPage() {
                 ← Back
               </Button>
               <Button
-                type="submit"
+                type="button"
                 className="flex-1"
-                disabled={formLoading}
-                onClick={() => checkPolicies()}
+                onClick={() => {
+                  checkPolicies();
+                  window.open('https://wa.me/2348029155825', '_blank', 'noopener,noreferrer');
+                }}
               >
-                {formLoading ? 'Submitting...' : 'Submit Shipping Request'}
+                Submit Shipping Request
               </Button>
             </div>
           </form>

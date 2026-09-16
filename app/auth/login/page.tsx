@@ -3,51 +3,20 @@
 import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
 
 function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect') || '/auth/dashboard';
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    const supabase = supabaseBrowser();
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
-
-    // Check if admin
-    const { data: adminData } = await supabase
-      .from('admins')
-      .select('id')
-      .eq('id', data.user.id)
-      .single();
-
-    if (adminData) {
-      // Full reload ensures middleware sees fresh session cookie on protected admin pages
-      window.location.href = '/admin/dashboard';
-    } else {
-      window.location.href = redirectTo;
-    }
+    window.open('https://wa.me/2348029155825', '_blank', 'noopener,noreferrer');
   }
 
   return (
@@ -124,8 +93,8 @@ function LoginForm() {
 
           {error && <p className="text-sm text-red-600">{error}</p>}
 
-          <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full" size="lg">
+            Sign In
           </Button>
         </form>
 
