@@ -58,8 +58,8 @@ We use essential cookies only for authentication and session management. We do n
 After receiving your item at our warehouse and payment confirmation, we process shipments within 1–2 business days.
 
 **Delivery Timeframes**
-- USA: 7–14 business days from warehouse receipt
-- UK: 7–14 business days from warehouse receipt
+- USA: 7 business days from warehouse receipt
+- UK: 7 business days from warehouse receipt
 - China: 14–21 business days from warehouse receipt
 
 Timeframes are estimates and may vary due to customs processing, public holidays, or unforeseen circumstances.

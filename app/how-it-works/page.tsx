@@ -214,7 +214,7 @@ const steps = [
     body: [
       'We send you a secure Paystack payment link via WhatsApp for the Nigeria-leg shipping cost. Pay by debit card, credit card, or bank transfer in Naira.',
       'Once paid, your package is dispatched and you receive a tracking number. Track in real time at buyandshiptonigeria.com/track at any stage of the journey.',
-      'Delivery takes 7–14 business days from our US or UK warehouse, and 14–21 business days from our China warehouse. You will receive status updates at every stage.',
+      'Delivery takes 7 business days from our US or UK warehouse, and 14–21 business days from our China warehouse. You will receive status updates at every stage.',
     ],
     mockSlug: 'track',
     mock: (

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s | BuyandShip Nigeria',
   },
   description:
-    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7–14 day delivery. Free account.',
+    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7-day US/UK delivery. Free account.',
   keywords: [
     'ship from US to Nigeria',
     'ship from UK to Nigeria',

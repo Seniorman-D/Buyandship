@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: 'How long does shipping take?',
-    a: "USA: 7–14 business days. UK: 7–14 business days. China: 14–21 business days. These are estimates from the time your item is received at our warehouse. Customs processing may add extra time.",
+    a: "USA: 7 business days. UK: 7 business days. China: 14–21 business days. These are estimates from the time your item is received at our warehouse. Customs processing may add extra time.",
   },
   {
     q: 'How do I pay for shipping?',
@@ -104,7 +104,7 @@ const faqJsonLd = {
     {
       '@type': 'Question',
       name: 'How long does shipping take?',
-      acceptedAnswer: { '@type': 'Answer', text: 'USA and UK shipments arrive in 7–14 business days from warehouse receipt. China shipments take 14–21 business days.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'USA and UK shipments arrive in 7 business days from warehouse receipt. China shipments take 14–21 business days.' },
     },
     {
       '@type': 'Question',

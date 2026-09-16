@@ -12,7 +12,7 @@ export function ShipmentConfirmedEmail({ firstName, trackingNumber, requestId }:
     { n: '1', title: 'Package arrives at warehouse', body: 'You receive a WhatsApp + email notification with the confirmed weight and shipping cost.' },
     { n: '2', title: 'We consolidate & weigh', body: 'Your package is weighed precisely and the Nigeria-leg shipping cost is calculated.' },
     { n: '3', title: 'You pay via Paystack', body: 'A Paystack payment link is sent via WhatsApp. Pay in Naira by card or bank transfer.' },
-    { n: '4', title: 'Delivered to your door', body: '7–14 business days (US/UK) or 14–21 days (China) from our warehouse.' },
+    { n: '4', title: 'Delivered to your door', body: '7 business days (US/UK) or 14–21 days (China) from our warehouse.' },
   ];
 
   return (

@@ -10,7 +10,7 @@ export function NurtureObjectionsEmail({ firstName }: NurtureObjectionsEmailProp
     'NIN verification speeds up customs clearance — verified accounts are flagged as trusted.',
     'Transparent rates — $9/lb US, £10/kg UK, $10/kg China — calculated before you shop. Use our rate calculator.',
     'No hidden fees. The rate you see is the rate you pay. Period.',
-    '7–14 business days with a real tracking number you can monitor at /track.',
+    '7 business days from the US/UK (14–21 from China) with a real tracking number you can monitor at /track.',
     'Real human WhatsApp support — not a bot. Real answers in minutes, not days.',
   ];
 

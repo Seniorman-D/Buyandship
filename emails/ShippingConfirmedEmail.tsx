@@ -10,6 +10,7 @@ interface Props {
 }
 
 export function ShippingConfirmedEmail({ name, requestId, trackingNumber, origin }: Props) {
+  const deliveryEstimate = origin === 'CHINA' ? '14–21 business days' : '7 business days';
   return (
     <Html>
       <Head />
@@ -32,7 +33,7 @@ export function ShippingConfirmedEmail({ name, requestId, trackingNumber, origin
             1. We&apos;ll receive your item at our {origin} warehouse<br />
             2. We&apos;ll weigh and measure your package<br />
             3. We&apos;ll send you an invoice for the shipping cost<br />
-            4. After payment, your item ships to Nigeria within 7–14 business days
+            4. After payment, your item ships to Nigeria within {deliveryEstimate}
           </Text>
           <Text style={text}>
             Track your shipment anytime at:{' '}

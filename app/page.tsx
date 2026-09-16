@@ -10,7 +10,7 @@ import {
 export const metadata: Metadata = {
   title: 'BuyandShip Nigeria — Ship from US, UK & China to Nigeria | $9/lb',
   description:
-    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7–14 day delivery. Free account.',
+    'Shop from Amazon, ASOS, Walmart & more. We ship from the US, UK and China to Nigeria at $9/lb. No hidden fees, NIN-verified, 7-day US/UK delivery. Free account.',
   alternates: { canonical: 'https://buyandshiptonigeria.com' },
 };
 
@@ -44,7 +44,7 @@ const jsonLd = {
     {
       '@type': 'Offer',
       name: 'USA to Nigeria Shipping',
-      description: 'Ship from USA to Nigeria at $9 per pound. Minimum charge $35. Delivery in 7–14 business days.',
+      description: 'Ship from USA to Nigeria at $9 per pound. Minimum charge $35. Delivery in 7 business days.',
       price: '9',
       priceCurrency: 'USD',
       eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
@@ -52,7 +52,7 @@ const jsonLd = {
     {
       '@type': 'Offer',
       name: 'UK to Nigeria Shipping',
-      description: 'Ship from UK to Nigeria at £10 per kilogram. Minimum charge £50. Delivery in 7–14 business days.',
+      description: 'Ship from UK to Nigeria at £10 per kilogram. Minimum charge £50. Delivery in 7 business days.',
       price: '10',
       priceCurrency: 'GBP',
       eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
@@ -100,7 +100,7 @@ const rates = [
 const whyUs = [
   { icon: <TrendingDown className="h-6 w-6" />, title: 'Lowest Rates', desc: 'Competitive per-kg/lb rates — no hidden fees, no surprises.' },
   { icon: <Shield className="h-6 w-6" />, title: 'Fully Verified', desc: 'NIN-verified accounts ensure your shipments are secure and traceable.' },
-  { icon: <Clock className="h-6 w-6" />, title: 'Fast Delivery', desc: '7–14 business days from warehouse to your door in Nigeria.' },
+  { icon: <Clock className="h-6 w-6" />, title: 'Fast Delivery', desc: '7 business days from the US/UK, 14–21 from China, to your door in Nigeria.' },
   { icon: <Users className="h-6 w-6" />, title: 'Procurement Service', desc: "Can't ship yourself? We buy it for you for just 5% fee." },
   { icon: <Globe className="h-6 w-6" />, title: '3 Countries', desc: 'USA, UK, and China covered. Shop from thousands of global retailers.' },
   { icon: <MessageCircle className="h-6 w-6" />, title: '24/7 WhatsApp', desc: 'Real human support on WhatsApp — always here when you need us.' },
