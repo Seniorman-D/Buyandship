@@ -19,7 +19,7 @@ const jsonLd = {
   '@type': 'Service',
   name: 'BuyandShip Nigeria',
   description:
-    'International shipping forwarding from USA, UK, and China to Nigeria. Shop from Amazon, ASOS, Walmart and more — we ship directly to your door in Nigeria at $9/lb from the US, £9/kg from the UK, and $10/kg from China.',
+    'International shipping forwarding from USA, UK, and China to Nigeria. Shop from Amazon, ASOS, Walmart and more — we ship directly to your door in Nigeria at $9/lb from the US, £10/kg from the UK, and $10/kg from China.',
   provider: {
     '@type': 'Organization',
     name: 'BuyandShip Nigeria',
@@ -52,8 +52,8 @@ const jsonLd = {
     {
       '@type': 'Offer',
       name: 'UK to Nigeria Shipping',
-      description: 'Ship from UK to Nigeria at £9 per kilogram. Minimum charge £45. Delivery in 7–14 business days.',
-      price: '9',
+      description: 'Ship from UK to Nigeria at £10 per kilogram. Minimum charge £50. Delivery in 7–14 business days.',
+      price: '10',
       priceCurrency: 'GBP',
       eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
     },
@@ -88,7 +88,7 @@ const rates = [
     color: 'border-blue-500', badge: 'Most Popular',
   },
   {
-    flag: '🇬🇧', origin: 'UK', rate: '£9/kg', min: '5kg minimum (£45)',
+    flag: '🇬🇧', origin: 'UK', rate: '£10/kg', min: '5kg minimum (£50)',
     color: 'border-red-500', badge: 'Gadgets OK',
   },
   {

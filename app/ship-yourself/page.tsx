@@ -129,7 +129,7 @@ export default function ShipYourselfPage() {
       warnings.push('⚠️ Gadgets/electronics from the UK require a receipt & invoice with your account name exactly as registered. Items will be held if documents do not match.');
     }
     if (origin === 'UK' && formData.weightKg && parseFloat(formData.weightKg) < 5) {
-      warnings.push('⚠️ UK minimum is 5kg – you will be charged for 5kg (£45 minimum).');
+      warnings.push('⚠️ UK minimum is 5kg – you will be charged for 5kg (£50 minimum).');
     }
     const val = parseFloat(declaredValue);
     if (origin === 'UK' && declaredCurrency === 'GBP' && val > 200) {

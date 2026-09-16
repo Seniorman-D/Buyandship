@@ -8,7 +8,7 @@ interface NurtureObjectionsEmailProps {
 export function NurtureObjectionsEmail({ firstName }: NurtureObjectionsEmailProps) {
   const reassurances = [
     'NIN verification speeds up customs clearance — verified accounts are flagged as trusted.',
-    'Transparent rates — $9/lb US, £9/kg UK, $10/kg China — calculated before you shop. Use our rate calculator.',
+    'Transparent rates — $9/lb US, £10/kg UK, $10/kg China — calculated before you shop. Use our rate calculator.',
     'No hidden fees. The rate you see is the rate you pay. Period.',
     '7–14 business days with a real tracking number you can monitor at /track.',
     'Real human WhatsApp support — not a bot. Real answers in minutes, not days.',

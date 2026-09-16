@@ -24,8 +24,8 @@ export function calculateShippingCost(origin: Origin, weightKg: number): RateRes
     const kg = Math.max(weightKg, 5);
     return {
       currency: 'GBP',
-      amount: parseFloat((kg * 9).toFixed(2)),
-      note: weightKg < 5 ? 'Minimum 5kg applied' : `${weightKg}kg × £9/kg`,
+      amount: parseFloat((kg * 10).toFixed(2)),
+      note: weightKg < 5 ? 'Minimum 5kg applied' : `${weightKg}kg × £10/kg`,
     };
   }
 
@@ -65,10 +65,10 @@ export const RATE_TABLE = {
   },
   UK: {
     currency: 'GBP',
-    ratePerUnit: 9,
+    ratePerUnit: 10,
     unit: 'kg',
-    minimum: { kg: 5, cost: 45 },
-    description: '£9/kg (minimum 5kg = £45)',
+    minimum: { kg: 5, cost: 50 },
+    description: '£10/kg (minimum 5kg = £50)',
     restriction: 'No gadgets/electronics',
   },
   CHINA: {

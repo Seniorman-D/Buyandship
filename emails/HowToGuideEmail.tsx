@@ -49,7 +49,7 @@ export function HowToGuideEmail({ firstName }: HowToGuideEmailProps) {
       <Section style={rateBox}>
         <Text style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 'bold', color: '#1e40af' }}>📦 Current Rates</Text>
         <Text style={{ margin: 0, fontSize: '13px', color: '#1e3a8a' }}>
-          🇺🇸 USA: $9/lb (min $35) &nbsp;·&nbsp; 🇬🇧 UK: £9/kg (min £45) &nbsp;·&nbsp; 🇨🇳 China: $10/kg (min $30)
+          🇺🇸 USA: $9/lb (min $35) &nbsp;·&nbsp; 🇬🇧 UK: £10/kg (min £50) &nbsp;·&nbsp; 🇨🇳 China: $10/kg (min $30)
         </Text>
         <Text style={{ margin: '8px 0 0', fontSize: '12px' }}>
           <Link href="https://buyandshiptonigeria.com/rates" style={{ color: '#1d4ed8' }}>Try the rate calculator →</Link>
