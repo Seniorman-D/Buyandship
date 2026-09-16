@@ -84,13 +84,15 @@ function LoginForm() {
                 type="button"
                 className="text-xs text-[#F97316] hover:underline"
                 onClick={() => {
-                  const supabase = supabaseBrowser();
-                  if (email) {
-                    supabase.auth.resetPasswordForEmail(email, {
-                      redirectTo: `${window.location.origin}/auth/reset-password`,
-                    });
-                    setError('Password reset email sent to ' + email);
+                  if (!email) {
+                    setError('Enter your email address above first.');
+                    return;
                   }
+                  const supabase = supabaseBrowser();
+                  supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/auth/reset-password`,
+                  });
+                  setError('Password reset email sent to ' + email);
                 }}
               >
                 Forgot password?

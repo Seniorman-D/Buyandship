@@ -13,6 +13,7 @@ export default function AdminLoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -80,8 +81,28 @@ export default function AdminLoginPage() {
             />
           </div>
           <div>
-            <Label htmlFor="password">Password</Label>
-            <div className="relative mt-1">
+            <div className="flex items-center justify-between mb-1">
+              <Label htmlFor="password">Password</Label>
+              <button
+                type="button"
+                className="text-xs text-[#F97316] hover:underline"
+                onClick={() => {
+                  setError('');
+                  if (!email) {
+                    setError('Enter your email address above first.');
+                    return;
+                  }
+                  const supabase = supabaseBrowser();
+                  supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/auth/reset-password`,
+                  });
+                  setResetMessage('Password reset email sent to ' + email);
+                }}
+              >
+                Forgot password?
+              </button>
+            </div>
+            <div className="relative">
               <Input
                 id="password"
                 type={showPw ? 'text' : 'password'}
@@ -107,6 +128,8 @@ export default function AdminLoginPage() {
               <p className="text-red-700 text-sm">{error}</p>
             </div>
           )}
+
+          {resetMessage && <p className="text-sm text-green-600">{resetMessage}</p>}
 
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
             {loading ? 'Signing in...' : 'Admin Sign In'}
