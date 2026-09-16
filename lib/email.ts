@@ -171,6 +171,22 @@ export async function sendPaymentConfirmedEmail(
   }
 }
 
+export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<EmailResult> {
+  try {
+    const { PasswordResetEmail } = await import('@/emails/PasswordResetEmail');
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject: 'Reset your BuyandShip Nigeria password',
+      react: PasswordResetEmail({ name, resetUrl }),
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Password reset email error:', error);
+    return { success: false, error: String(error) };
+  }
+}
+
 export async function sendIDVerifiedEmail(to: string, name: string): Promise<EmailResult> {
   try {
     const { IDVerifiedEmail } = await import('@/emails/IDVerifiedEmail');

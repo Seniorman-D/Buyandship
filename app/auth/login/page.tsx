@@ -83,16 +83,20 @@ function LoginForm() {
               <button
                 type="button"
                 className="text-xs text-[#F97316] hover:underline"
-                onClick={() => {
+                onClick={async () => {
                   if (!email) {
                     setError('Enter your email address above first.');
                     return;
                   }
-                  const supabase = supabaseBrowser();
-                  supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: `${window.location.origin}/auth/reset-password`,
+                  await fetch('/api/auth/request-password-reset', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      email,
+                      redirectTo: `${window.location.origin}/auth/reset-password`,
+                    }),
                   });
-                  setError('Password reset email sent to ' + email);
+                  setError('If an account exists for ' + email + ', a reset link has been sent.');
                 }}
               >
                 Forgot password?
