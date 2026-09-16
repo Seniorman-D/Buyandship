@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,7 +8,6 @@ import { Label } from '@/components/ui/label';
 import { Shield, Eye, EyeOff, AlertTriangle } from 'lucide-react';
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
@@ -46,7 +44,8 @@ export default function AdminLoginPage() {
         return;
       }
 
-      router.push('/admin/dashboard');
+      // Full reload ensures middleware sees fresh session cookie on protected admin pages
+      window.location.href = '/admin/dashboard';
     } catch (err) {
       setError('Something went wrong. Please try again.');
       console.error('Admin login error:', err);
