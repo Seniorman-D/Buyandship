@@ -31,11 +31,11 @@ export function UrgencyEmail({ firstName }: UrgencyEmailProps) {
       <Text style={{ ...body, paddingLeft: '8px' }}>
         1. Shop on any US store (Amazon, Walmart, eBay, etc.)<br />
         2. Ship to your BuyandShip US warehouse address<br />
-        3. Submit a Shipping Request in your dashboard<br />
+        3. Send us the details on WhatsApp<br />
         4. We handle the rest — for free.
       </Text>
 
-      <Button href="https://buyandshiptonigeria.com/ship-yourself" style={ctaButton}>
+      <Button href="https://wa.me/2348029155825" style={ctaButton}>
         Claim My Free Shipment →
       </Button>
 

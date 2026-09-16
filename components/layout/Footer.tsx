@@ -32,9 +32,21 @@ export function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Services</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/ship-yourself" className="hover:text-white transition-colors">Ship Yourself</Link></li>
-              <li><Link href="/procure" className="hover:text-white transition-colors">Procurement Service</Link></li>
-              <li><Link href="/track" className="hover:text-white transition-colors">Track Shipment</Link></li>
+              <li>
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Ship Yourself
+                </a>
+              </li>
+              <li>
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Procurement Service
+                </a>
+              </li>
+              <li>
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Track Shipment
+                </a>
+              </li>
               <li><Link href="/rates" className="hover:text-white transition-colors">Shipping Rates</Link></li>
             </ul>
           </div>
@@ -46,7 +58,6 @@ export function Footer() {
               <li><Link href="/faqs" className="hover:text-white transition-colors">FAQs</Link></li>
               <li><Link href="/policies" className="hover:text-white transition-colors">Policies</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link href="/auth/signup" className="hover:text-white transition-colors">Create Account</Link></li>
             </ul>
           </div>
 

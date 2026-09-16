@@ -91,7 +91,7 @@ function ResetPasswordForm() {
         <p className="text-slate-600 mb-6">
           This password reset link is invalid or has expired. Please request a new one from the login page.
         </p>
-        <Link href="/auth/login">
+        <Link href="/admin/login">
           <Button className="w-full">Back to Login</Button>
         </Link>
       </div>

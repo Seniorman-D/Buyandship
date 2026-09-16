@@ -10,7 +10,7 @@ export function NurtureObjectionsEmail({ firstName }: NurtureObjectionsEmailProp
     'NIN verification speeds up customs clearance — verified accounts are flagged as trusted.',
     'Transparent rates — $9/lb US, £10/kg UK, $10/kg China — calculated before you shop. Use our rate calculator.',
     'No hidden fees. The rate you see is the rate you pay. Period.',
-    '7 business days from the US/UK (14–21 from China) with a real tracking number you can monitor at /track.',
+    '7 business days from the US/UK (14 from China) once your warehouse ships it, with a real tracking number we send you on WhatsApp.',
     'Real human WhatsApp support — not a bot. Real answers in minutes, not days.',
   ];
 
@@ -43,7 +43,7 @@ export function NurtureObjectionsEmail({ firstName }: NurtureObjectionsEmailProp
           Read Our FAQs
         </Link>
         {'   '}
-        <Link href="https://buyandshiptonigeria.com/ship-yourself" style={ctaFilled}>
+        <Link href="https://wa.me/2348029155825" style={ctaFilled}>
           Ship My First Package →
         </Link>
       </Section>

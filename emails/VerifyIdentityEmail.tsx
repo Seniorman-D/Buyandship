@@ -29,7 +29,7 @@ export function VerifyIdentityEmail({ firstName }: VerifyIdentityEmailProps) {
         ))}
       </Section>
 
-      <Button href="https://buyandshiptonigeria.com/auth/login" style={ctaButton}>
+      <Button href="https://wa.me/2348029155825" style={ctaButton}>
         Complete Verification →
       </Button>
 

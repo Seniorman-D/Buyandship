@@ -31,7 +31,7 @@ export function WinBackEmail({ firstName }: WinBackEmailProps) {
         </Text>
       </Section>
 
-      <Button href="https://buyandshiptonigeria.com/ship-yourself" style={ctaButton}>
+      <Button href="https://wa.me/2348029155825" style={ctaButton}>
         Restart My Shipment →
       </Button>
 

@@ -84,7 +84,7 @@ function CustomerDashboardContent() {
       // getSession() reads from cookies — no network call, never returns null mid-refresh
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        router.push('/auth/login');
+        router.push('/');
         return;
       }
 
@@ -119,7 +119,7 @@ function CustomerDashboardContent() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
       if (event === 'SIGNED_OUT' && !session) {
-        router.push('/auth/login');
+        router.push('/');
       }
     });
 
@@ -245,11 +245,11 @@ function CustomerDashboardContent() {
               ) : (
                 <Badge variant="warning">ID Pending</Badge>
               )}
-              <Link href="/ship-yourself">
+              <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
                 <Button size="sm" variant="accent">
                   <Plus className="h-4 w-4 mr-1" /> New Request
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -297,15 +297,17 @@ function CustomerDashboardContent() {
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-slate-100">
               <h2 className="font-semibold text-[#0A2540]">Shipping Requests</h2>
-              <Link href="/ship-yourself">
+              <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
                 <Button size="sm" variant="accent"><Plus className="h-4 w-4 mr-1" /> New</Button>
-              </Link>
+              </a>
             </div>
             {shippingRequests.length === 0 ? (
               <div className="text-center py-12 text-slate-400">
                 <Package className="h-10 w-10 mx-auto mb-3 opacity-30" />
                 <p>No shipping requests yet</p>
-                <Link href="/ship-yourself"><Button size="sm" className="mt-3">Submit your first request</Button></Link>
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="mt-3">Submit your first request</Button>
+                </a>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -358,15 +360,17 @@ function CustomerDashboardContent() {
           <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-slate-100">
               <h2 className="font-semibold text-[#0A2540]">Procurement Requests</h2>
-              <Link href="/procure">
+              <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
                 <Button size="sm" variant="accent"><Plus className="h-4 w-4 mr-1" /> New</Button>
-              </Link>
+              </a>
             </div>
             {procurements.length === 0 ? (
               <div className="text-center py-12 text-slate-400">
                 <Package className="h-10 w-10 mx-auto mb-3 opacity-30" />
                 <p>No procurement requests yet</p>
-                <Link href="/procure"><Button size="sm" className="mt-3">Request procurement</Button></Link>
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="mt-3">Request procurement</Button>
+                </a>
               </div>
             ) : (
               <div className="overflow-x-auto">

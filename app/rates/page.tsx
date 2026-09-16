@@ -168,9 +168,9 @@ export default function RatesPage() {
           <div className="p-6 bg-blue-50 border border-blue-200 rounded-xl">
             <h3 className="font-bold text-blue-900 mb-3">Delivery Timeframes</h3>
             <ul className="text-sm text-blue-800 space-y-2">
-              <li>• <strong>USA:</strong> 7 business days from warehouse receipt</li>
-              <li>• <strong>UK:</strong> 7 business days from warehouse receipt</li>
-              <li>• <strong>China:</strong> 14–21 business days from warehouse receipt</li>
+              <li>• <strong>USA:</strong> 7 business days from when the warehouse sends your item to Nigeria</li>
+              <li>• <strong>UK:</strong> 7 business days from when the warehouse sends your item to Nigeria</li>
+              <li>• <strong>China:</strong> 14 business days from when the warehouse sends your item to Nigeria</li>
               <li>• Timeframes are estimates and may vary with customs</li>
               <li>• Express options available on request via WhatsApp</li>
             </ul>

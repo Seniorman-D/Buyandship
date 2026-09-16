@@ -9,8 +9,8 @@ export function HowToGuideEmail({ firstName }: HowToGuideEmailProps) {
   const steps = [
     {
       n: '1',
-      title: 'Create & verify your account',
-      body: 'Complete NIN or ID verification in your dashboard. Takes under 2 minutes and is required for Nigerian customs.',
+      title: 'Verify your identity on WhatsApp',
+      body: 'Send your NIN or a valid ID to our WhatsApp line. Takes under 2 minutes and is required for Nigerian customs.',
     },
     {
       n: '2',
@@ -25,7 +25,7 @@ export function HowToGuideEmail({ firstName }: HowToGuideEmailProps) {
     {
       n: '4',
       title: 'We ship to Nigeria',
-      body: 'We weigh your package, send you a WhatsApp notification with the cost, you confirm and pay, we ship. Track at /track.',
+      body: 'We weigh your package, send you a WhatsApp notification with the cost, you confirm and pay, we ship. We send tracking updates on WhatsApp.',
     },
   ];
 
@@ -58,10 +58,10 @@ export function HowToGuideEmail({ firstName }: HowToGuideEmailProps) {
 
       <Text style={{ ...body, marginTop: '16px' }}>
         Can&apos;t shop on foreign sites? No dollar card?{' '}
-        <Link href="https://buyandshiptonigeria.com/procure" style={{ color: '#0A2540', fontWeight: 'bold' }}>Use our Procurement Service</Link> — we buy it for you for just 5% of the item cost.
+        <Link href="https://wa.me/2348029155825" style={{ color: '#0A2540', fontWeight: 'bold' }}>Use our Procurement Service</Link> — we buy it for you for just 5% of the item cost.
       </Text>
 
-      <Button href="https://buyandshiptonigeria.com/procure" style={ctaGreen}>
+      <Button href="https://wa.me/2348029155825" style={ctaGreen}>
         Use Procurement Service →
       </Button>
     </BaseLayout>

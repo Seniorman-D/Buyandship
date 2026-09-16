@@ -60,7 +60,7 @@ const jsonLd = {
     {
       '@type': 'Offer',
       name: 'China to Nigeria Shipping',
-      description: 'Ship from China to Nigeria at $10 per kilogram. Minimum charge $30. Delivery in 14–21 business days.',
+      description: 'Ship from China to Nigeria at $10 per kilogram. Minimum charge $30. Delivery in 14 business days.',
       price: '10',
       priceCurrency: 'USD',
       eligibleRegion: { '@type': 'Country', name: 'Nigeria' },
@@ -100,7 +100,7 @@ const rates = [
 const whyUs = [
   { icon: <TrendingDown className="h-6 w-6" />, title: 'Lowest Rates', desc: 'Competitive per-kg/lb rates — no hidden fees, no surprises.' },
   { icon: <Shield className="h-6 w-6" />, title: 'Fully Verified', desc: 'NIN-verified accounts ensure your shipments are secure and traceable.' },
-  { icon: <Clock className="h-6 w-6" />, title: 'Fast Delivery', desc: '7 business days from the US/UK, 14–21 from China, to your door in Nigeria.' },
+  { icon: <Clock className="h-6 w-6" />, title: 'Fast Delivery', desc: '7 business days from the US/UK, 14 from China, once your warehouse ships it.' },
   { icon: <Users className="h-6 w-6" />, title: 'Procurement Service', desc: "Can't ship yourself? We buy it for you for just 5% fee." },
   { icon: <Globe className="h-6 w-6" />, title: '3 Countries', desc: 'USA, UK, and China covered. Shop from thousands of global retailers.' },
   { icon: <MessageCircle className="h-6 w-6" />, title: '24/7 WhatsApp', desc: 'Real human support on WhatsApp — always here when you need us.' },

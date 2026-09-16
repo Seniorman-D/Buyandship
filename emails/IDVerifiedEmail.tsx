@@ -24,8 +24,8 @@ export function IDVerifiedEmail({ name }: Props) {
           </Text>
           <Text style={text}>
             <strong>Ready to get started?</strong><br />
-            • <Link href={`${process.env.NEXT_PUBLIC_SITE_URL}/ship-yourself`}>Submit a Shipping Request</Link><br />
-            • <Link href={`${process.env.NEXT_PUBLIC_SITE_URL}/procure`}>Request Procurement Service</Link>
+            Message us on <Link href="https://wa.me/2348029155825">WhatsApp</Link> with a shipping or
+            procurement request and we&apos;ll take it from there.
           </Text>
           <Hr style={hr} />
           <Text style={text}>

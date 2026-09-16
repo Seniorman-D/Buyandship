@@ -44,7 +44,7 @@ export function NurtureValueEmail({ firstName }: NurtureValueEmailProps) {
         any product link and we buy it for you for just 5% of the item cost.
       </Text>
 
-      <Button href="https://buyandshiptonigeria.com/ship-yourself" style={ctaButton}>
+      <Button href="https://wa.me/2348029155825" style={ctaButton}>
         Start My First Shipment →
       </Button>
     </BaseLayout>

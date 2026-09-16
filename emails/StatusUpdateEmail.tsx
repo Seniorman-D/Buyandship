@@ -35,15 +35,9 @@ export function StatusUpdateEmail({ name, requestId, status, statusLabel }: Prop
             <Text style={statusValue}>{statusLabel}</Text>
             <Text style={statusDesc}>{description}</Text>
           </Section>
-          <Text style={text}>
-            Track your shipment live:{' '}
-            <Link href={`${process.env.NEXT_PUBLIC_SITE_URL}/track`}>
-              buyandshiptonigeria.com/track
-            </Link>
-          </Text>
           <Hr style={hr} />
           <Text style={text}>
-            Questions? WhatsApp: <Link href="https://wa.me/2348029155825">08029155825</Link>
+            Track your shipment or ask questions on WhatsApp: <Link href="https://wa.me/2348029155825">08029155825</Link>
           </Text>
           <Text style={footer}>© {new Date().getFullYear()} BuyandShip Nigeria</Text>
         </Container>

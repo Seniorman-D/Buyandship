@@ -58,9 +58,9 @@ We use essential cookies only for authentication and session management. We do n
 After receiving your item at our warehouse and payment confirmation, we process shipments within 1–2 business days.
 
 **Delivery Timeframes**
-- USA: 7 business days from warehouse receipt
-- UK: 7 business days from warehouse receipt
-- China: 14–21 business days from warehouse receipt
+- USA: 7 business days from when the warehouse sends your item to Nigeria
+- UK: 7 business days from when the warehouse sends your item to Nigeria
+- China: 14 business days from when the warehouse sends your item to Nigeria
 
 Timeframes are estimates and may vary due to customs processing, public holidays, or unforeseen circumstances.
 

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function ShippingConfirmedEmail({ name, requestId, trackingNumber, origin }: Props) {
-  const deliveryEstimate = origin === 'CHINA' ? '14–21 business days' : '7 business days';
+  const deliveryEstimate = origin === 'CHINA' ? '14 business days' : '7 business days';
   return (
     <Html>
       <Head />
@@ -35,15 +35,9 @@ export function ShippingConfirmedEmail({ name, requestId, trackingNumber, origin
             3. We&apos;ll send you an invoice for the shipping cost<br />
             4. After payment, your item ships to Nigeria within {deliveryEstimate}
           </Text>
-          <Text style={text}>
-            Track your shipment anytime at:{' '}
-            <Link href={`${process.env.NEXT_PUBLIC_SITE_URL}/track`}>
-              buyandshiptonigeria.com/track
-            </Link>
-          </Text>
           <Hr style={hr} />
           <Text style={text}>
-            Questions? WhatsApp us: <Link href="https://wa.me/2348029155825">08029155825</Link>
+            Track your shipment or ask questions on WhatsApp: <Link href="https://wa.me/2348029155825">08029155825</Link>
           </Text>
           <Text style={footer}>© {new Date().getFullYear()} BuyandShip Nigeria</Text>
         </Container>

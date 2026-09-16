@@ -30,7 +30,7 @@ export function PostDeliveryEmail({ firstName }: PostDeliveryEmailProps) {
 
       <Section style={{ borderTop: '1px solid #e5e7eb', marginTop: '24px', paddingTop: '20px' }}>
         <Text style={{ ...body, marginBottom: '12px' }}>Ready for your next shipment?</Text>
-        <Button href="https://buyandshiptonigeria.com/ship-yourself" style={ctaBlue}>
+        <Button href="https://wa.me/2348029155825" style={ctaBlue}>
           Start Next Shipment →
         </Button>
       </Section>

@@ -48,47 +48,42 @@ function TipPill({ text }: { text: string }) {
 const steps = [
   {
     number: '01',
-    title: 'Create Your Account & Verify Your Identity',
+    title: 'Message Us to Create Your Account & Verify Your Identity',
     bg: 'bg-white',
     body: [
-      'Navigate to buyandshiptonigeria.com and click "Get Started Free." Enter your name, email, phone number and create a password.',
-      'You will be prompted to verify your identity with your NIN (National Identification Number) or a government-issued ID such as a Driver\'s Licence, International Passport, or Voter\'s Card.',
+      'Message us on WhatsApp to get started. Tell us your name, email, and phone number and we will set up your account.',
+      'We will ask you to verify your identity with your NIN (National Identification Number) or a government-issued ID such as a Driver\'s Licence, International Passport, or Voter\'s Card.',
       'This is a one-time step required for Nigerian customs compliance and takes under 2 minutes. Once verified, your account is fully activated and ready for shipments.',
     ],
-    mockSlug: 'auth/signup',
+    mockSlug: '',
     mock: (
       <div className="space-y-3">
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Full Name</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">e.g. Chukwuemeka Okonkwo</div>
+        <div className="bg-[#dcf8c6] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+          <p className="text-sm text-slate-800 leading-relaxed">
+            Hi! I&apos;d like to sign up. My name is Chukwuemeka Okonkwo, email chuk@email.com, phone 080XXXXXXXX.
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">10:12 AM ✓✓</p>
         </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Email Address</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">your@email.com</div>
+        <div className="bg-white border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-2 max-w-xs ml-auto">
+          <p className="text-sm text-slate-700">
+            Welcome! Please send a photo of your NIN slip or a valid ID to verify your identity. 🙏
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">10:13 AM ✓✓</p>
         </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Phone Number</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">080XXXXXXXX</div>
-        </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">NIN / ID Number</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">11-digit NIN</div>
-        </div>
-        <div className="h-9 bg-[#0A2540] rounded-md flex items-center justify-center text-white text-sm font-semibold">Create My Account</div>
       </div>
     ),
-    tip: 'Use the same name on your BuyandShip account as the one on your shopping site — it speeds up customs clearance.',
+    tip: 'Use the same name with us as the one on your shopping site — it speeds up customs clearance.',
   },
   {
     number: '02',
     title: 'Find Your Personal Warehouse Address',
     bg: 'bg-slate-50',
     body: [
-      'After signing up, go to Dashboard → My Addresses. You will see your dedicated US, UK, and China warehouse addresses. These are unique to your account.',
+      'Once your account is set up, we send you your dedicated US, UK, and China warehouse addresses on WhatsApp. These are unique to your account.',
       'Use these as your delivery address when you shop online — the retailer ships to our warehouse, and we ship onwards to Nigeria.',
       'Your US address includes a Suite number unique to your account so packages are matched to you instantly when they arrive at our facility.',
     ],
-    mockSlug: 'auth/dashboard',
+    mockSlug: '',
     mock: (
       <div className="space-y-3">
         {[
@@ -141,37 +136,30 @@ const steps = [
   },
   {
     number: '04',
-    title: 'Submit a Shipping Request',
+    title: 'Submit a Shipping Request on WhatsApp',
     bg: 'bg-slate-50',
     body: [
-      'Once you have placed your order with the retailer, log into your BuyandShip dashboard and click "New Shipping Request." This takes about 2 minutes.',
+      'Once you have placed your order with the retailer, message us on WhatsApp with the item, retailer, and origin country. This takes about 2 minutes.',
       'Declare what is coming, the approximate weight, the retailer, and the origin country. This lets our team look out for your package at the warehouse and process it faster on arrival.',
       'Use the rate calculator at /rates to estimate your shipping cost to Nigeria before you place your order, so there are no surprises.',
     ],
-    mockSlug: 'ship-yourself',
+    mockSlug: '',
     mock: (
       <div className="space-y-3">
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Item Description</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">e.g. Nike Air Max 270, Size 10</div>
+        <div className="bg-[#dcf8c6] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+          <p className="text-sm text-slate-800 leading-relaxed">
+            📦 New shipment incoming:<br />
+            Item: Nike Air Max 270, Size 10<br />
+            Store: Amazon.com<br />
+            Est. weight: 1.5 lbs<br />
+            Origin: 🇺🇸 USA
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">2:04 PM ✓✓</p>
         </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Retailer / Store</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">e.g. Amazon.com</div>
+        <div className="bg-white border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-2 max-w-xs ml-auto">
+          <p className="text-sm text-slate-700">Got it — we&apos;ll look out for it at the warehouse! 👍</p>
+          <p className="text-xs text-slate-400 text-right mt-1">2:05 PM ✓✓</p>
         </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Estimated Weight</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">e.g. 1.5 lbs</div>
-        </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Origin</label>
-          <div className="flex gap-2">
-            {['🇺🇸 USA', '🇬🇧 UK', '🇨🇳 China'].map((o) => (
-              <div key={o} className={`flex-1 h-9 rounded-md border text-xs flex items-center justify-center font-medium ${o.includes('USA') ? 'bg-[#0A2540] text-white border-[#0A2540]' : 'bg-white text-slate-500 border-slate-200'}`}>{o}</div>
-            ))}
-          </div>
-        </div>
-        <div className="h-9 bg-[#F97316] rounded-md flex items-center justify-center text-white text-sm font-semibold">Submit Request</div>
       </div>
     ),
     tip: 'Use the rate calculator at /rates to estimate your shipping cost before you order.',
@@ -213,34 +201,26 @@ const steps = [
     bg: 'bg-slate-50',
     body: [
       'We send you a secure Paystack payment link via WhatsApp for the Nigeria-leg shipping cost. Pay by debit card, credit card, or bank transfer in Naira.',
-      'Once paid, your package is dispatched and you receive a tracking number. Track in real time at buyandshiptonigeria.com/track at any stage of the journey.',
-      'Delivery takes 7 business days from our US or UK warehouse, and 14–21 business days from our China warehouse. You will receive status updates at every stage.',
+      'Once paid, your package is dispatched and you receive a tracking number. Message us on WhatsApp anytime for a live update on your shipment.',
+      'Delivery takes 7 business days from when our US or UK warehouse sends your item, and 14 business days from when our China warehouse sends it. You will receive status updates at every stage.',
     ],
-    mockSlug: 'track',
+    mockSlug: '',
     mock: (
-      <div className="space-y-4">
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Tracking Number</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-500 font-mono">BAS-17123456-ABCD</div>
+      <div className="space-y-3">
+        <div className="bg-[#dcf8c6] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+          <p className="text-sm text-slate-800 leading-relaxed">
+            What&apos;s the status on BAS-17123456-ABCD?
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">9:02 AM ✓✓</p>
         </div>
-        <div className="space-y-0">
-          {[
-            { label: 'Warehouse Received', done: true },
-            { label: 'In Transit', done: true },
-            { label: 'Customs Cleared', done: false },
-            { label: 'Out for Delivery', done: false },
-            { label: 'Delivered', done: false },
-          ].map((step, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="flex flex-col items-center">
-                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${step.done ? 'bg-green-500 border-green-500' : 'bg-white border-slate-300'}`}>
-                  {step.done && <div className="w-2 h-2 bg-white rounded-full" />}
-                </div>
-                {i < 4 && <div className={`w-0.5 h-6 ${step.done ? 'bg-green-400' : 'bg-slate-200'}`} />}
-              </div>
-              <p className={`text-xs ${step.done ? 'text-green-700 font-semibold' : 'text-slate-400'}`}>{step.label}</p>
-            </div>
-          ))}
+        <div className="bg-white border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-2 max-w-xs ml-auto">
+          <p className="text-sm text-slate-700">
+            📦 Warehouse Received ✅<br />
+            📦 In Transit ✅<br />
+            📦 Customs Cleared — pending<br />
+            You&apos;re on track for delivery within the estimate. We&apos;ll update you at each stage!
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">9:04 AM ✓✓</p>
         </div>
       </div>
     ),
@@ -251,36 +231,24 @@ const steps = [
     title: "Can't Shop Abroad? Use Procurement",
     bg: 'bg-white',
     body: [
-      "No dollar card? No foreign account? No problem. Our Procurement Service lets you send us a product link from any US, UK, or China retailer and we buy it for you.",
+      "No dollar card? No foreign account? No problem. Send us a product link from any US, UK, or China retailer on WhatsApp and we buy it for you.",
       'We charge 5% of the item cost as our procurement fee, plus the standard shipping rate to Nigeria. You pay us via Paystack in Naira before we place the order.',
       'Procurement works for shoes, electronics, supplements, fashion, baby products, books — virtually anything sold on US, UK, or China stores that is not on our prohibited items list.',
     ],
-    mockSlug: 'procure',
+    mockSlug: '',
     mock: (
       <div className="space-y-3">
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Product URL</label>
-          <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400 font-mono truncate">https://amazon.com/dp/B09XKXYZ12</div>
+        <div className="bg-[#dcf8c6] rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs">
+          <p className="text-sm text-slate-800 leading-relaxed break-all">
+            Can you get this for me? https://amazon.com/dp/B09XKXYZ12<br />
+            Size UK 10 / Black, Qty 1, from 🇺🇸 USA
+          </p>
+          <p className="text-xs text-slate-400 text-right mt-1">4:20 PM ✓✓</p>
         </div>
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="text-xs text-slate-500 font-medium block mb-1">Size / Variant</label>
-            <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">UK 10 / Black</div>
-          </div>
-          <div className="w-20">
-            <label className="text-xs text-slate-500 font-medium block mb-1">Qty</label>
-            <div className="h-9 bg-slate-100 rounded-md border border-slate-200 px-3 text-sm flex items-center text-slate-400">1</div>
-          </div>
+        <div className="bg-white border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-2 max-w-xs ml-auto">
+          <p className="text-sm text-slate-700">Sure! We&apos;ll send you a cost estimate shortly. 🛍️</p>
+          <p className="text-xs text-slate-400 text-right mt-1">4:22 PM ✓✓</p>
         </div>
-        <div>
-          <label className="text-xs text-slate-500 font-medium block mb-1">Origin</label>
-          <div className="flex gap-2">
-            {['🇺🇸 USA', '🇬🇧 UK', '🇨🇳 China'].map((o) => (
-              <div key={o} className={`flex-1 h-9 rounded-md border text-xs flex items-center justify-center font-medium ${o.includes('USA') ? 'bg-[#0A2540] text-white border-[#0A2540]' : 'bg-white text-slate-500 border-slate-200'}`}>{o}</div>
-            ))}
-          </div>
-        </div>
-        <div className="h-9 bg-[#F97316] rounded-md flex items-center justify-center text-white text-sm font-semibold">Submit Procurement Request</div>
       </div>
     ),
     tip: 'Procurement fee is just 5% of item cost. Shipping is charged separately at the same standard rates.',

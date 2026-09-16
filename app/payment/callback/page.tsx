@@ -64,9 +64,9 @@ function PaymentCallbackContent() {
                 <Link href="/auth/dashboard">
                   <Button>View Dashboard</Button>
                 </Link>
-                <Link href="/track">
+                <a href="https://wa.me/2348029155825" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline">Track Shipment</Button>
-                </Link>
+                </a>
               </div>
             </>
           )}

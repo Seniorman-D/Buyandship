@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: 'How long does shipping take?',
-    a: "USA: 7 business days. UK: 7 business days. China: 14–21 business days. These are estimates from the time your item is received at our warehouse. Customs processing may add extra time.",
+    a: "USA: 7 business days. UK: 7 business days. China: 14 business days. These are estimates from the time your warehouse sends the item to Nigeria, not from when it's received. Customs processing may add extra time.",
   },
   {
     q: 'How do I pay for shipping?',
@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: 'Can I track my shipment?',
-    a: "Yes. You can track your shipment on our /track page using your Request ID or tracking number. You'll also receive email updates whenever your shipment status changes.",
+    a: "Yes. Message us on WhatsApp with your Request ID or tracking number and we'll give you a live update. You'll also receive email updates whenever your shipment status changes.",
   },
   {
     q: 'What items are prohibited?',
@@ -104,7 +104,7 @@ const faqJsonLd = {
     {
       '@type': 'Question',
       name: 'How long does shipping take?',
-      acceptedAnswer: { '@type': 'Answer', text: 'USA and UK shipments arrive in 7 business days from warehouse receipt. China shipments take 14–21 business days.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'USA and UK shipments arrive in 7 business days from when the warehouse sends the item. China shipments take 14 business days.' },
     },
     {
       '@type': 'Question',
@@ -124,7 +124,7 @@ const faqJsonLd = {
     {
       '@type': 'Question',
       name: 'How do I track my shipment?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Track your shipment at buyandshiptonigeria.com/track using your tracking number. You will also receive email updates at each stage.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Message us on WhatsApp with your tracking number for a live update. You will also receive email updates at each stage.' },
     },
     {
       '@type': 'Question',

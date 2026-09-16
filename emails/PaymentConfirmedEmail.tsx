@@ -57,10 +57,7 @@ export function PaymentConfirmedEmail({ name, requestId, amount, currency, isAdm
           </Text>
           <Hr style={hr} />
           <Text style={text}>
-            Track your shipment: <Link href={`${process.env.NEXT_PUBLIC_SITE_URL}/track`}>buyandshiptonigeria.com/track</Link>
-          </Text>
-          <Text style={text}>
-            Questions? WhatsApp: <Link href="https://wa.me/2348029155825">08029155825</Link>
+            Track your shipment or ask questions on WhatsApp: <Link href="https://wa.me/2348029155825">08029155825</Link>
           </Text>
           <Text style={footer}>© {new Date().getFullYear()} BuyandShip Nigeria</Text>
         </Container>
