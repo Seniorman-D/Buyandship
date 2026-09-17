@@ -182,7 +182,7 @@ export async function sendVerificationSubmissionEmail(
     await resend.emails.send({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
-      replyTo: email,
+      reply_to: email,
       subject: `New Verification Submission — ${fullName}`,
       react: VerificationSubmissionEmail({ fullName, email, phone, fileName: file.filename }),
       attachments: [{ filename: file.filename, content: file.content }],
