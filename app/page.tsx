@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PublicLayout } from '@/components/layout/PublicLayout';
+import { VerificationPortal } from '@/components/VerificationPortal';
 import { Button } from '@/components/ui/button';
 import {
   Package, CheckCircle, Star, Shield, Clock, MessageCircle, ArrowRight, Globe,
@@ -228,6 +229,17 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Verification Portal */}
+      <section className="py-16 px-4 bg-slate-50">
+        <div className="container mx-auto max-w-5xl">
+          <h2 className="text-3xl font-bold text-center text-[#0A2540] mb-2">Want to Ship or Shop Yourself?</h2>
+          <p className="text-center text-slate-500 mb-10">
+            Verify your identity below and our team will reach out to get you set up.
+          </p>
+          <VerificationPortal />
         </div>
       </section>
 

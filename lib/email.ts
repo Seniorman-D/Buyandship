@@ -171,6 +171,29 @@ export async function sendPaymentConfirmedEmail(
   }
 }
 
+export async function sendVerificationSubmissionEmail(
+  fullName: string,
+  email: string,
+  phone: string,
+  file: { filename: string; content: Buffer }
+): Promise<EmailResult> {
+  try {
+    const { VerificationSubmissionEmail } = await import('@/emails/VerificationSubmissionEmail');
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: ADMIN_EMAIL,
+      replyTo: email,
+      subject: `New Verification Submission — ${fullName}`,
+      react: VerificationSubmissionEmail({ fullName, email, phone, fileName: file.filename }),
+      attachments: [{ filename: file.filename, content: file.content }],
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Verification submission email error:', error);
+    return { success: false, error: String(error) };
+  }
+}
+
 export async function sendPasswordResetEmail(to: string, name: string, resetUrl: string): Promise<EmailResult> {
   try {
     const { PasswordResetEmail } = await import('@/emails/PasswordResetEmail');
