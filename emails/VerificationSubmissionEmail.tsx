@@ -5,23 +5,25 @@ interface VerificationSubmissionEmailProps {
   fullName: string;
   email: string;
   phone: string;
-  fileName: string;
+  nin: string;
+  verifiedName: string;
 }
 
-export function VerificationSubmissionEmail({ fullName, email, phone, fileName }: VerificationSubmissionEmailProps) {
+export function VerificationSubmissionEmail({ fullName, email, phone, nin, verifiedName }: VerificationSubmissionEmailProps) {
   return (
-    <BaseLayout preview={`New self-procurement verification submission from ${fullName}`}>
-      <Heading style={h1}>New Verification Submission</Heading>
+    <BaseLayout preview={`${fullName} just verified their NIN via the self-procurement portal`}>
+      <Heading style={h1}>New NIN Verification — Prembly Confirmed ✅</Heading>
       <Text style={body}>
-        Someone submitted an ID for verification via the self-procurement portal on the
-        website. Their document is attached to this email.
+        Someone verified their identity via the self-procurement portal on the website. Their
+        NIN was confirmed live against Prembly&apos;s database.
       </Text>
 
       <Section style={infoBox}>
-        <Text style={infoRow}><strong>Name:</strong> {fullName}</Text>
+        <Text style={infoRow}><strong>Name Submitted:</strong> {fullName}</Text>
+        <Text style={infoRow}><strong>Name on NIN Record:</strong> {verifiedName || 'Not returned'}</Text>
         <Text style={infoRow}><strong>Email:</strong> {email}</Text>
         <Text style={infoRow}><strong>Phone:</strong> {phone || 'Not provided'}</Text>
-        <Text style={infoRow}><strong>Attachment:</strong> {fileName}</Text>
+        <Text style={infoRow}><strong>NIN:</strong> {nin}</Text>
       </Section>
 
       <Hr style={hr} />

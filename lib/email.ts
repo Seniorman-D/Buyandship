@@ -183,7 +183,8 @@ export async function sendVerificationSubmissionEmail(
   fullName: string,
   email: string,
   phone: string,
-  file: { filename: string; content: Buffer }
+  nin: string,
+  verifiedName: string
 ): Promise<EmailResult> {
   try {
     const { VerificationSubmissionEmail } = await import('@/emails/VerificationSubmissionEmail');
@@ -191,9 +192,8 @@ export async function sendVerificationSubmissionEmail(
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       reply_to: email,
-      subject: `New Verification Submission — ${fullName}`,
-      react: VerificationSubmissionEmail({ fullName, email, phone, fileName: file.filename }),
-      attachments: [{ filename: file.filename, content: file.content }],
+      subject: `NIN Verified — ${fullName}`,
+      react: VerificationSubmissionEmail({ fullName, email, phone, nin, verifiedName }),
     });
     if (error) throw error;
     return { success: true };

@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UploadCloud, CheckCircle } from 'lucide-react';
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+import { CheckCircle, ShieldCheck } from 'lucide-react';
 
 function validatePhone(phone: string) {
   return /^(0[7-9][01]\d{8}|\+234[7-9][01]\d{8})$/.test(phone.replace(/\s/g, ''));
@@ -16,9 +14,10 @@ export function VerificationPortal() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [file, setFile] = useState<File | null>(null);
+  const [nin, setNin] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [verifiedName, setVerifiedName] = useState('');
   const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -29,24 +28,18 @@ export function VerificationPortal() {
       setError('Enter a valid Nigerian phone number (e.g. 08012345678).');
       return;
     }
-    if (!file) {
-      setError('Please attach your NIN slip or a valid ID.');
-      return;
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      setError('File is too large — max 5MB.');
+    if (nin.length !== 11 || !/^\d{11}$/.test(nin)) {
+      setError('Enter a valid 11-digit NIN.');
       return;
     }
 
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('fullName', fullName);
-      formData.append('email', email);
-      formData.append('phone', phone);
-      formData.append('file', file);
-
-      const res = await fetch('/api/verification', { method: 'POST', body: formData });
+      const res = await fetch('/api/verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, phone, nin }),
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -54,6 +47,7 @@ export function VerificationPortal() {
         return;
       }
 
+      setVerifiedName(`${data.firstName || ''} ${data.lastName || ''}`.trim());
       setSuccess(true);
     } catch {
       setError('Something went wrong. Please try again or reach us on WhatsApp.');
@@ -68,10 +62,10 @@ export function VerificationPortal() {
         <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="h-7 w-7 text-green-600" />
         </div>
-        <h3 className="text-xl font-bold text-[#0A2540] mb-2">Submitted!</h3>
+        <h3 className="text-xl font-bold text-[#0A2540] mb-2">Identity Verified!</h3>
         <p className="text-slate-600 text-sm">
-          We&apos;ve received your ID. Our team will verify it and reach out to you on WhatsApp or
-          email shortly.
+          {verifiedName ? <>Confirmed as <strong>{verifiedName}</strong>. </> : null}
+          Our team will reach out to you on WhatsApp or email shortly to get you started.
         </p>
       </div>
     );
@@ -81,8 +75,8 @@ export function VerificationPortal() {
     <div className="bg-white rounded-2xl border border-slate-200 p-8 max-w-lg mx-auto shadow-sm">
       <h3 className="text-xl font-bold text-[#0A2540] mb-1">Identity Verification Portal</h3>
       <p className="text-slate-500 text-sm mb-6">
-        Want to ship or shop for yourself? Verify your identity here and our team will reach out
-        to get you started.
+        Want to ship or shop for yourself? Verify your NIN below — it&apos;s checked instantly
+        against the national database.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -126,29 +120,27 @@ export function VerificationPortal() {
         </div>
 
         <div>
-          <Label htmlFor="v-file">NIN Slip or Government ID *</Label>
-          <label
-            htmlFor="v-file"
-            className="mt-1 flex items-center gap-3 border-2 border-dashed border-slate-200 rounded-lg px-4 py-3 cursor-pointer hover:border-[#F97316] transition-colors"
-          >
-            <UploadCloud className="h-5 w-5 text-slate-400 flex-shrink-0" />
-            <span className="text-sm text-slate-500 truncate">
-              {file ? file.name : 'Click to upload (JPG, PNG, or PDF — max 5MB)'}
-            </span>
-          </label>
-          <input
-            id="v-file"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,application/pdf"
-            className="hidden"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-          />
+          <Label htmlFor="v-nin">NIN (National Identification Number) *</Label>
+          <div className="relative mt-1">
+            <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              id="v-nin"
+              type="text"
+              inputMode="numeric"
+              required
+              maxLength={11}
+              placeholder="11-digit NIN"
+              value={nin}
+              onChange={(e) => setNin(e.target.value.replace(/\D/g, '').slice(0, 11))}
+              className="pl-9"
+            />
+          </div>
         </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <Button type="submit" className="w-full" size="lg" disabled={loading}>
-          {loading ? 'Submitting...' : 'Submit for Verification'}
+          {loading ? 'Verifying...' : 'Verify My Identity'}
         </Button>
       </form>
     </div>
