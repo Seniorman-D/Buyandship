@@ -42,7 +42,7 @@ export async function scheduleDripSequence(user: AutomationUser) {
   ]);
 
   // Schedule all 5 emails in parallel (fire-and-forget)
-  await Promise.allSettled([
+  const results = await Promise.allSettled([
     // scheduledAt is supported by the Resend API but not yet typed in v3 SDK — cast via any
     (resend.emails.send as any)({
       from: FROM,
@@ -80,18 +80,27 @@ export async function scheduleDripSequence(user: AutomationUser) {
       scheduledAt: daysFromNow(14),
     }),
   ]);
+
+  results.forEach((r, i) => {
+    if (r.status === 'rejected') {
+      console.error(`Drip sequence email ${i} failed to schedule:`, r.reason);
+    } else if (r.value?.error) {
+      console.error(`Drip sequence email ${i} failed to schedule:`, r.value.error);
+    }
+  });
 }
 
 // ─── IMMEDIATE SENDS (condition-checked at call time) ────────────────────────
 
 export async function sendWelcomeAutomation(user: AutomationUser) {
   const { WelcomeEmail } = await import('@/emails/WelcomeEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `🎉 Welcome ${firstName(user.full_name)} — your warehouse address is ready`,
     react: WelcomeEmail({ name: user.full_name }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Welcome automation error:', error);
 }
 
 export async function sendHowToGuideAutomation(user: AutomationUser) {
@@ -102,12 +111,13 @@ export async function sendHowToGuideAutomation(user: AutomationUser) {
   if ((shipCount ?? 0) > 0 || (procCount ?? 0) > 0) return;
 
   const { HowToGuideEmail } = await import('@/emails/HowToGuideEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: '📦 Your complete guide to shipping from the US, UK & China',
     react: HowToGuideEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('How-to-guide automation error:', error);
 }
 
 export async function sendVerifyIdentityAutomation(user: AutomationUser) {
@@ -116,12 +126,13 @@ export async function sendVerifyIdentityAutomation(user: AutomationUser) {
   if (customer?.nin_verified) return;
 
   const { VerifyIdentityEmail } = await import('@/emails/VerifyIdentityEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `⚠️ ${firstName(user.full_name)}, your account isn't fully activated yet`,
     react: VerifyIdentityEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Verify-identity automation error:', error);
 }
 
 export async function sendNurtureValueAutomation(user: AutomationUser) {
@@ -132,12 +143,13 @@ export async function sendNurtureValueAutomation(user: AutomationUser) {
   if ((shipCount ?? 0) > 0 || (procCount ?? 0) > 0) return;
 
   const { NurtureValueEmail } = await import('@/emails/NurtureValueEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: 'What ₦50,000 actually buys you on Amazon right now 👀',
     react: NurtureValueEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Nurture-value automation error:', error);
 }
 
 export async function sendNurtureObjectionsAutomation(user: AutomationUser) {
@@ -148,12 +160,13 @@ export async function sendNurtureObjectionsAutomation(user: AutomationUser) {
   if ((shipCount ?? 0) > 0 || (procCount ?? 0) > 0) return;
 
   const { NurtureObjectionsEmail } = await import('@/emails/NurtureObjectionsEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: 'The #1 fear people have about shipping from abroad (and the truth)',
     react: NurtureObjectionsEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Nurture-objections automation error:', error);
 }
 
 export async function sendUrgencyAutomation(user: AutomationUser) {
@@ -164,42 +177,46 @@ export async function sendUrgencyAutomation(user: AutomationUser) {
   if ((shipCount ?? 0) > 0 || (procCount ?? 0) > 0) return;
 
   const { UrgencyEmail } = await import('@/emails/UrgencyEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `${firstName(user.full_name)}, this offer expires Friday 🕐`,
     react: UrgencyEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Urgency automation error:', error);
 }
 
 // ─── TRACK B — Event-triggered ───────────────────────────────────────────────
 
 export async function sendShipmentConfirmedAutomation(user: AutomationUser, trackingNumber?: string, requestId?: string) {
   const { ShipmentConfirmedEmail } = await import('@/emails/ShipmentConfirmedEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `🎉 We've got it, ${firstName(user.full_name)} — your shipment is in motion`,
     react: ShipmentConfirmedEmail({ firstName: firstName(user.full_name), trackingNumber, requestId }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Shipment-confirmed automation error:', error);
 }
 
 export async function sendPostDeliveryAutomation(user: AutomationUser) {
   const { PostDeliveryEmail } = await import('@/emails/PostDeliveryEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `${firstName(user.full_name)}, how was your delivery? 🌟`,
     react: PostDeliveryEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Post-delivery automation error:', error);
 }
 
 export async function sendWinBackAutomation(user: AutomationUser) {
   const { WinBackEmail } = await import('@/emails/WinBackEmail');
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to: user.email,
     subject: `${firstName(user.full_name)}, it's been a while 👋 — we kept your address warm`,
     react: WinBackEmail({ firstName: firstName(user.full_name) }),
-  }).catch(console.error);
+  }).catch((err) => ({ data: null, error: err }));
+  if (error) console.error('Win-back automation error:', error);
 }

@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'BuyandShip Nigeria <noreply@buyandshiptonigeria.com>',
       to: ADMIN_EMAIL,
       reply_to: email,
@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
         <p>${message.replace(/\n/g, '<br />')}</p>
       `,
     });
+    if (error) throw error;
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -61,8 +61,11 @@ export async function POST(req: NextRequest) {
 
     try {
       const result = await resend.batch.send(messages);
-      if (Array.isArray(result.data)) {
-        sent += result.data.length;
+      if (result.error) {
+        failed += chunk.length;
+        errors.push(result.error.message || String(result.error));
+      } else if (Array.isArray(result.data?.data)) {
+        sent += result.data.data.length;
       } else {
         sent += chunk.length;
       }
